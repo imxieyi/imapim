@@ -50,7 +50,9 @@ public class SMTPHelper {
         MimeMessage message = new MimeMessage(session);
         message.setFrom(new InternetAddress(mail.from));
         message.setSubject(mail.subject);
-        message.setRecipient(Message.RecipientType.TO, new InternetAddress(mail.to));
+        for(String addr : mail.to) {
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(addr));
+        }
         message.setSentDate(new Date());
         message.setText(mail.content);
         message.saveChanges();
@@ -65,7 +67,7 @@ public class SMTPHelper {
     void testSendMail() throws MessagingException {
         Email email = new Email();
         email.from = "im@lattepanda";
-        email.to = "xieyi@lattepanda";
+        email.to.add("xieyi@lattepanda");
         email.subject = "java test";
         email.content = "java test";
         getInstance().send(email);

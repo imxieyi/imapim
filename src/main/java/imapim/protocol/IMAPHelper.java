@@ -58,7 +58,7 @@ public class IMAPHelper extends Observable {
             Store store = null;
             IMAPFolder folder;
             Thread keepalive = null;
-            while(true) {
+            while(!Thread.interrupted()) {
                 try {
                     session = Session.getDefaultInstance(props);
                     store = session.getStore("imap");
@@ -153,7 +153,9 @@ public class IMAPHelper extends Observable {
         Email e = new Email();
         try {
             e.from = m.getFrom()[0].toString();
-            e.to = m.getAllRecipients()[0].toString();
+            for(Address recipient : m.getAllRecipients()) {
+                e.to.add(recipient.toString());
+            }
             e.subject = m.getSubject();
             e.content = (String)m.getContent();
             e.timestamp = m.getSentDate();
