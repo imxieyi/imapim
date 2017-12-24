@@ -70,18 +70,18 @@ public class IMController {
         MessageHelper.getInstance().addObserver((o, arg) -> {
             Message m = (Message) arg;
             log.fine("Got new message: " + m.content);
-            appendMessage(m);
+            appendMessage(m, false);
         });
         MessageHelper.getInstance().start();
     }
 
-    int i = 0;
-
-    private void appendMessage(Message m) {
+    private void appendMessage(Message m, boolean sent) {
         Node mNode = new DataNode(m.content);
+        String color = "blue";
+        if (sent) color = "green";
         // Timestamp & Sender
         Node tNode = new DataNode(
-                "<p><font face=\"Arial\" color=\"blue\" size=\"2\"><b>" +
+                "<p><font face=\"Arial\" color=\"" + color + "\" size=\"2\"><b>" +
                 m.from + "  " +
                 m.timestamp.toString() +
                 "</b></font></p>"
@@ -103,7 +103,7 @@ public class IMController {
         m.content = doc.body().html();
         try {
             MessageHelper.getInstance().send(m);
-            appendMessage(m);
+            appendMessage(m, true);
             input.setHtmlText("");
         } catch (IOException | PGPException e) {
             log.warning("Failed to encrypt message: " + e.getMessage());
@@ -111,12 +111,6 @@ public class IMController {
             log.warning("Failed to send message: " + e.getMessage());
             e.printStackTrace();
         }
-//        i++;
-//        Node countNode = new DataNode(
-//                "<h1>Count: " + i + "</h1>"
-//        );
-//        messagesDocument.body().appendChild(countNode);
-//        messages.getEngine().loadContent(messagesDocument.toString());
     }
 
 }
