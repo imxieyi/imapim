@@ -27,6 +27,8 @@ public class SMTPHelper {
     private Properties props = new Properties();
     private String user;
     private String password;
+    private Session session;
+    private Transport transport;
 
     private SMTPHelper() {
         Properties config = new Properties();
@@ -39,13 +41,15 @@ public class SMTPHelper {
             props.setProperty("mail.debug", config.getProperty("debug"));
             user = config.getProperty("user");
             password = config.getProperty("password");
+            session = Session.getInstance(props);
+            transport = session.getTransport();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
     public void send(Email mail) throws MessagingException {
-        Session session = Session.getDefaultInstance(props);
+//        Session session = Session.getInstance(props);
         // Compose email
         MimeMessage message = new MimeMessage(session);
         message.setFrom(new InternetAddress(mail.from));
@@ -53,11 +57,14 @@ public class SMTPHelper {
         for(String addr : mail.to) {
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(addr));
         }
-        message.setSentDate(new Date());
+        if(mail.timestamp == null) {
+            mail.timestamp = new Date();
+        }
+        message.setSentDate(mail.timestamp);
         message.setText(mail.content);
         message.saveChanges();
         // Send email
-        Transport transport = session.getTransport();
+//        Transport transport = session.getTransport();
         transport.connect(user, password);
         transport.sendMessage(message, message.getAllRecipients());
         transport.close();

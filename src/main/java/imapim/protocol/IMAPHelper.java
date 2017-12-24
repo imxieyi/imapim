@@ -14,8 +14,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Observable;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 public class IMAPHelper extends Observable {
+
+    private static Logger log = Logger.getLogger(IMAPHelper.class.getName());
+
     private static IMAPHelper ourInstance = null;
 
     public static synchronized IMAPHelper getInstance() {
@@ -48,6 +52,7 @@ public class IMAPHelper extends Observable {
     }
 
     private Thread imapThread;
+    private IMAPFolder folder;
 
     /**
      * Start listening to new emails.
@@ -56,11 +61,10 @@ public class IMAPHelper extends Observable {
         imapThread = new Thread(() -> {
             Session session;
             Store store = null;
-            IMAPFolder folder;
             Thread keepalive = null;
             while(!Thread.interrupted()) {
                 try {
-                    session = Session.getDefaultInstance(props);
+                    session = Session.getInstance(props);
                     store = session.getStore("imap");
                     store.connect(user, password);
                     folder = (IMAPFolder) store.getFolder(mailbox);
@@ -69,10 +73,19 @@ public class IMAPHelper extends Observable {
                         @Override
                         public void messagesAdded(MessageCountEvent e) {
                             for (Message m : e.getMessages()) {
-                                Email em = parseMessage(m);
-                                if (em != null) {
-                                    setChanged();
-                                    notifyObservers(em);
+                                try {
+                                    if (!m.getSubject().equals("IM Message")) {
+                                        // Not IM message
+                                        m.setFlag(Flags.Flag.SEEN, false);
+                                        continue;
+                                    }
+                                    Email em = parseMessage(m);
+                                    if (em != null) {
+                                        setChanged();
+                                        notifyObservers(em);
+                                    }
+                                } catch (Exception ee) {
+                                    ee.printStackTrace();
                                 }
                             }
                         }
@@ -82,7 +95,7 @@ public class IMAPHelper extends Observable {
                     });
                     keepalive = new Thread(new KeepAliveRunnable(folder));
                     keepalive.start();
-                    System.out.println("Started listening for new messages");
+                    log.info("Started listening to new messages");
                     while(!Thread.interrupted()) {
                         // Keep connection alive
                         folder.idle();
@@ -95,6 +108,10 @@ public class IMAPHelper extends Observable {
                     return;
                 } catch (Exception e) {
                     e.printStackTrace();
+                    try {
+                        Thread.sleep(10000);
+                    } catch (InterruptedException ignored) {
+                    }
                 } finally {
                     try {
                         if(store != null) {
@@ -103,8 +120,7 @@ public class IMAPHelper extends Observable {
                         if(keepalive != null) {
                             keepalive.interrupt();
                         }
-                        Thread.sleep(10000);
-                    } catch (InterruptedException | MessagingException e) {
+                    } catch (MessagingException e) {
                         e.printStackTrace();
                     }
                 }
@@ -118,6 +134,10 @@ public class IMAPHelper extends Observable {
      */
     public void stopListening() {
         imapThread.interrupt();
+        try {
+            folder.close();
+        } catch (MessagingException ignored) {
+        }
     }
 
     public ArrayList<Email> getMails() throws MessagingException {
@@ -140,6 +160,11 @@ public class IMAPHelper extends Observable {
         ArrayList<Email> emails = new ArrayList<>();
         // Set messages as read
         for(Message m : messages) {
+            if(!m.getSubject().equals("IM Message")) {
+                // Not IM message
+                m.setFlag(Flags.Flag.SEEN, false);
+                continue;
+            }
             m.setFlag(Flags.Flag.SEEN, true);
             Email e = parseMessage(m);
             if (e != null) {
@@ -207,7 +232,8 @@ class KeepAliveRunnable implements Runnable {
                     protocol.simpleCommand("NOOP", null);
                     return null;
                 });
-            } catch (InterruptedException ignored) {
+            } catch (InterruptedException e) {
+                return;
             } catch (MessagingException e) {
                 e.printStackTrace();
             }

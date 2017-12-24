@@ -1,5 +1,6 @@
 package imapim.ui;
 
+import imapim.protocol.IMAPHelper;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -18,6 +19,7 @@ public class IM extends Application {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("IM");
         initRootLayout();
+        this.primaryStage.setOnCloseRequest((e) -> IMAPHelper.getInstance().stopListening());
     }
 
     private void initRootLayout() {

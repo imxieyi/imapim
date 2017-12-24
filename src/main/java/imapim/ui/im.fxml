@@ -4,10 +4,13 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.web.HTMLEditor?>
 <?import javafx.scene.web.WebView?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="imapim.ui.IMController">
-   <children>
-      <WebView fx:id="messages" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-      <HTMLEditor fx:id="input" htmlText="" layoutX="8.0" layoutY="220.0" prefHeight="159.0" prefWidth="506.0" AnchorPane.bottomAnchor="41.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
-      <Button layoutX="536.0" layoutY="368.0" mnemonicParsing="false" onAction="#send" prefHeight="25.0" prefWidth="60.0" text="Send" AnchorPane.bottomAnchor="8.0" AnchorPane.rightAnchor="8.0" />
-   </children>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
+            prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="imapim.ui.IMController">
+   <WebView fx:id="messages" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="200.0"
+            AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+   <HTMLEditor fx:id="input" htmlText="" layoutX="8.0" layoutY="220.0" prefHeight="159.0" prefWidth="506.0"
+               AnchorPane.bottomAnchor="41.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"/>
+   <Button layoutX="536.0" layoutY="368.0" mnemonicParsing="false" onAction="#send" prefHeight="25.0" prefWidth="60.0"
+           text="Send" AnchorPane.bottomAnchor="8.0" AnchorPane.rightAnchor="8.0"/>
 </AnchorPane>

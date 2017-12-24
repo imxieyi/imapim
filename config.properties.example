@@ -1,0 +1,20 @@
+# Email account
+smtphost=smtp.gg.gg
+smtpport=25
+imaphost=imap.gg.gg
+imapport=143
+email=im@gg
+user=gg
+password=123456
+mailbox=INBOX
+debug=false
+
+# GPG Key
+pubkeyfile=~/.gnupg/pubring.gpg
+pubkeyid=E6B255D0
+prikeyfile=~/.gnupg/pubring.gpg
+prikeyid=FB2588E3
+prikeypass=123456
+
+# Application
+recipient=gg@gg
