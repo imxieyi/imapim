@@ -35,6 +35,10 @@ public class SMTPHelper {
         try {
             config.load(new FileInputStream(new File("config.properties")));
             props.setProperty("mail.transport.protocol", "smtp");
+            if(config.getProperty("smtpssl").equals("true")) {
+                props.put("mail.smtp.socketFactory.port", config.getProperty("smtpport"));
+                props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+            }
             props.setProperty("mail.smtp.host", config.getProperty("smtphost"));
             props.setProperty("mail.smtp.port", config.getProperty("smtpport"));
             props.setProperty("mail.smtp.auth", "true");

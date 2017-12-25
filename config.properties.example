@@ -1,8 +1,10 @@
 # Email account
 smtphost=smtp.gg.gg
 smtpport=25
+smtpssl=true
 imaphost=imap.gg.gg
 imapport=143
+imapssl=true
 email=im@gg
 user=gg
 password=123456

@@ -79,6 +79,7 @@ public class IMController {
             Message m = (Message) arg;
             log.fine("Got new message: " + m.content);
             appendMessage(m, false);
+            stage.toFront();
         });
         IMAPHelper.getInstance().connectionStatus.addObserver((o, arg) -> {
             String status = (String) arg;

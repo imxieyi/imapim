@@ -1,6 +1,7 @@
 package imapim.protocol;
 
 import com.sun.mail.imap.IMAPFolder;
+import com.sun.mail.util.MailSSLSocketFactory;
 import imapim.data.Email;
 import org.junit.jupiter.api.Test;
 
@@ -39,6 +40,15 @@ public class IMAPHelper extends Observable {
         try {
             config.load(new FileInputStream(new File("config.properties")));
             props.setProperty("mail.transport.protocol", "imap");
+            if(config.getProperty("imapssl").equals("true")) {
+                MailSSLSocketFactory socketFactory= new MailSSLSocketFactory();
+                socketFactory.setTrustAllHosts(true);
+                props.put("mail.imap.starttls.enable", "true");
+                props.setProperty("mail.imap.ssl.enable", "true");
+                props.put("mail.imap.socketFactory.port", config.getProperty("imapport"));
+                props.put("mail.imaps.ssl.socketFactory", socketFactory);
+//                props.put("mail.imap.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+            }
             props.setProperty("mail.imap.host", config.getProperty("imaphost"));
             props.setProperty("mail.imap.port", config.getProperty("imapport"));
             props.setProperty("mail.debug", config.getProperty("debug"));
@@ -120,6 +130,7 @@ public class IMAPHelper extends Observable {
                     return;
                 } catch (Exception e) {
                     try {
+//                        e.printStackTrace();
                         connectionStatus.notify("lost");
                         log.warning("Connection lost, retry after 10 seconds");
                         Thread.sleep(10000);
@@ -228,7 +239,7 @@ public class IMAPHelper extends Observable {
 // Reference: https://stackoverflow.com/questions/4155412/javamail-keeping-imapfolder-idle-alive
 class KeepAliveRunnable implements Runnable {
 
-    private static final long TIME_INTERVAL = 60000;
+    private static final long TIME_INTERVAL = 300000;
 
     private IMAPFolder folder;
 
