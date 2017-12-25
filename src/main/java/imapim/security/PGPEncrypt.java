@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.*;
 import java.security.SecureRandom;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 
@@ -23,7 +24,7 @@ import java.util.Iterator;
 // https://stackoverflow.com/questions/3939447/how-to-encrypt-a-string-stream-with-bouncycastle-pgp-without-starting-with-a-fil
 public class PGPEncrypt {
 
-    public static String getAlgorithm(int algId) {
+    static String getAlgorithm(int algId) {
         switch (algId) {
             case PublicKeyAlgorithmTags.RSA_GENERAL:
                 return "RSA_GENERAL";
@@ -47,14 +48,14 @@ public class PGPEncrypt {
         return "unknown";
     }
 
-    private PGPPublicKey publicKey;
+    private ArrayList<PGPPublicKey> publicKeys = new ArrayList<>();
 
     public void loadPublicKey(String path, String id) throws IOException, PGPException {
         InputStream is = PGPUtil.getDecoderStream(new FileInputStream(path));
         KeyFingerPrintCalculator calculator = new BcKeyFingerprintCalculator();
         PGPPublicKeyRingCollection keyRings = new PGPPublicKeyRingCollection(is, calculator);
         Iterator<PGPPublicKeyRing> it = keyRings.getKeyRings();
-        publicKey = null;
+        PGPPublicKey publicKey = null;
         while (publicKey == null && it.hasNext()) {
             PGPPublicKeyRing keyRing = it.next();
             Iterator<PGPPublicKey> kit = keyRing.getPublicKeys();
@@ -68,6 +69,7 @@ public class PGPEncrypt {
         if (publicKey == null) {
             throw new IllegalArgumentException("No encryption key in given key ring");
         }
+        publicKeys.add(publicKey);
     }
 
     public byte[] encrypt(byte data[], boolean armor, boolean withIntegrityCheck) throws IOException, PGPException {
@@ -96,8 +98,10 @@ public class PGPEncrypt {
                 .setWithIntegrityPacket(withIntegrityCheck)
                 .setSecureRandom(new SecureRandom());
         PGPEncryptedDataGenerator cPk = new PGPEncryptedDataGenerator(builder);
-        PGPKeyEncryptionMethodGenerator generator = new BcPublicKeyKeyEncryptionMethodGenerator(publicKey).setSecureRandom(new SecureRandom());
-        cPk.addMethod(generator);
+        for(PGPPublicKey publicKey : publicKeys) {
+            PGPKeyEncryptionMethodGenerator generator = new BcPublicKeyKeyEncryptionMethodGenerator(publicKey).setSecureRandom(new SecureRandom());
+            cPk.addMethod(generator);
+        }
         byte[] bytes = bOut.toByteArray();
         OutputStream cOut = cPk.open(out, bytes.length);
         cOut.write(bytes);
@@ -148,19 +152,19 @@ public class PGPEncrypt {
     @Test
     void testLoadPublicKeyFromKeyRing() throws IOException, PGPException {
         loadPublicKey("C:\\msys64\\home\\wez73\\.gnupg\\pubring.gpg", "E6B255D0");
-        System.out.println("Public key ID: " + Long.toHexString(publicKey.getKeyID()));
-        System.out.println("\tAlgorithm: " + getAlgorithm(publicKey.getAlgorithm()));
-        System.out.println("\tStrength: " + publicKey.getBitStrength());
-        System.out.println("\tFingerprint: " + new String(Hex.encode(publicKey.getFingerprint())));
+        System.out.println("Public key ID: " + Long.toHexString(publicKeys.get(0).getKeyID()));
+        System.out.println("\tAlgorithm: " + getAlgorithm(publicKeys.get(0).getAlgorithm()));
+        System.out.println("\tStrength: " + publicKeys.get(0).getBitStrength());
+        System.out.println("\tFingerprint: " + new String(Hex.encode(publicKeys.get(0).getFingerprint())));
     }
 
     @Test
     void testLoadPublicKeyFromTextFile() throws IOException, PGPException {
         loadPublicKey("C:\\Users\\wez73\\public-key.txt", "E6B255D0");
-        System.out.println("Public key ID: " + Long.toHexString(publicKey.getKeyID()));
-        System.out.println("\tAlgorithm: " + getAlgorithm(publicKey.getAlgorithm()));
-        System.out.println("\tStrength: " + publicKey.getBitStrength());
-        System.out.println("\tFingerprint: " + new String(Hex.encode(publicKey.getFingerprint())));
+        System.out.println("Public key ID: " + Long.toHexString(publicKeys.get(0).getKeyID()));
+        System.out.println("\tAlgorithm: " + getAlgorithm(publicKeys.get(0).getAlgorithm()));
+        System.out.println("\tStrength: " + publicKeys.get(0).getBitStrength());
+        System.out.println("\tFingerprint: " + new String(Hex.encode(publicKeys.get(0).getFingerprint())));
     }
 
     @Test
