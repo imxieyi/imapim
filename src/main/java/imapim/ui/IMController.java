@@ -23,10 +23,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Node;
 
 import javax.mail.MessagingException;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import javax.mail.internet.MimeUtility;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Properties;
@@ -120,6 +118,14 @@ public class IMController {
         Node mNode = new DataNode(m.content);
         String color = "blue";
         if (sent) color = "green";
+        // Fix sender display
+        try {
+            m.from = MimeUtility.decodeText(m.from);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        m.from = m.from.replaceAll("<","&lt;");
+        m.from = m.from.replaceAll(">","&gt;");
         // Timestamp & Sender
         Node tNode = new DataNode(
                 "\n<p><font face=\"Arial\" color=\"" + color + "\" size=\"2\"><b>" +
