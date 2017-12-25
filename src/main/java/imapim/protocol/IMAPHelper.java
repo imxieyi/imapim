@@ -54,6 +54,15 @@ public class IMAPHelper extends Observable {
     private Thread imapThread;
     private IMAPFolder folder;
 
+    public class StatusObservable extends Observable {
+        void notify(String status) {
+            setChanged();
+            notifyObservers(status);
+        }
+    }
+
+    public StatusObservable connectionStatus = new StatusObservable();
+
     /**
      * Start listening to new emails.
      */
@@ -64,6 +73,7 @@ public class IMAPHelper extends Observable {
             Thread keepalive = null;
             while(!Thread.interrupted()) {
                 try {
+                    connectionStatus.notify("connecting");
                     session = Session.getInstance(props);
                     store = session.getStore("imap");
                     store.connect(user, password);
@@ -96,10 +106,12 @@ public class IMAPHelper extends Observable {
                     keepalive = new Thread(new KeepAliveRunnable(folder));
                     keepalive.start();
                     log.info("Started listening to new messages");
+                    connectionStatus.notify("connected");
                     while(!Thread.interrupted()) {
                         // Keep connection alive
                         folder.idle();
                     }
+                    connectionStatus.notify("disconnected");
                     // Stop listening
                     if (keepalive.isAlive()) {
                         keepalive.interrupt();
@@ -107,8 +119,9 @@ public class IMAPHelper extends Observable {
                     store.close();
                     return;
                 } catch (Exception e) {
-                    e.printStackTrace();
                     try {
+                        connectionStatus.notify("lost");
+                        log.warning("Connection lost, retry after 10 seconds");
                         Thread.sleep(10000);
                     } catch (InterruptedException ignored) {
                     }
@@ -120,8 +133,7 @@ public class IMAPHelper extends Observable {
                         if(keepalive != null) {
                             keepalive.interrupt();
                         }
-                    } catch (MessagingException e) {
-                        e.printStackTrace();
+                    } catch (MessagingException ignored) {
                     }
                 }
             }
@@ -208,7 +220,6 @@ public class IMAPHelper extends Observable {
         });
         getInstance().startListening();
     }
-
 }
 
 // Reference: https://stackoverflow.com/questions/4155412/javamail-keeping-imapfolder-idle-alive

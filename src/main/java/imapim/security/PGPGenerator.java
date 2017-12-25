@@ -25,7 +25,9 @@ import java.util.Iterator;
 // Reference: https://bouncycastle-pgp-cookbook.blogspot.sg/2013/01/generating-rsa-keys.html
 public class PGPGenerator {
 
-    public final static String generate(String pubring, String priring, String id, String pass) throws Exception {
+    public static int strength = 4096;
+
+    public static String generate(String pubring, String priring, String id, String pass) throws Exception {
         PGPKeyRingGenerator krgen = generateKeyRingGenerator(id, pass);
 
         // Generate public key ring, dump to file.
@@ -50,7 +52,7 @@ public class PGPGenerator {
         return keyid;
     }
 
-    private final static PGPKeyRingGenerator generateKeyRingGenerator(String id, String pass) throws Exception {
+    private static PGPKeyRingGenerator generateKeyRingGenerator(String id, String pass) throws Exception {
         return generateKeyRingGenerator(id, pass.toCharArray(), 0xc0);
     }
 
@@ -67,14 +69,14 @@ public class PGPGenerator {
     // 0xff, or about 2 million iterations.  I'll use 0xc0 as a
     // default -- about 130,000 iterations.
 
-    private final static PGPKeyRingGenerator generateKeyRingGenerator(String id, char[] pass, int s2kcount) throws Exception {
+    private static PGPKeyRingGenerator generateKeyRingGenerator(String id, char[] pass, int s2kcount) throws Exception {
         // This object generates individual key-pairs.
         RSAKeyPairGenerator kpg = new RSAKeyPairGenerator();
 
         // Boilerplate RSA parameters, no need to change anything
         // except for the RSA key-size (2048). You can use whatever
         // key-size makes sense for you -- 4096, etc.
-        kpg.init(new RSAKeyGenerationParameters(BigInteger.valueOf(0x10001), new SecureRandom(), 4096, 12));
+        kpg.init(new RSAKeyGenerationParameters(BigInteger.valueOf(0x10001), new SecureRandom(), strength, 12));
 
         // First create the master (signing) key with the generator.
         PGPKeyPair rsakp_sign = new BcPGPKeyPair(PGPPublicKey.RSA_SIGN, kpg.generateKeyPair(), new Date());
