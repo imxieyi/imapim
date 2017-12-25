@@ -71,7 +71,7 @@ public class IMAPHelper extends Observable {
             Session session;
             Store store = null;
             Thread keepalive = null;
-            while(!Thread.interrupted()) {
+            while(!Thread.currentThread().isInterrupted()) {
                 try {
                     connectionStatus.notify("connecting");
                     session = Session.getInstance(props);
@@ -124,6 +124,7 @@ public class IMAPHelper extends Observable {
                         log.warning("Connection lost, retry after 10 seconds");
                         Thread.sleep(10000);
                     } catch (InterruptedException ignored) {
+                        Thread.currentThread().interrupt();
                     }
                 } finally {
                     try {
@@ -147,7 +148,9 @@ public class IMAPHelper extends Observable {
     public void stopListening() {
         imapThread.interrupt();
         try {
-            folder.close();
+            if(folder != null) {
+                folder.close();
+            }
         } catch (MessagingException ignored) {
         }
     }
