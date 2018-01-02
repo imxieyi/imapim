@@ -1,5 +1,6 @@
 package imapim.security;
 
+import org.bouncycastle.bcpg.ArmoredOutputStream;
 import org.bouncycastle.bcpg.HashAlgorithmTags;
 import org.bouncycastle.bcpg.SymmetricKeyAlgorithmTags;
 import org.bouncycastle.bcpg.sig.Features;
@@ -26,18 +27,28 @@ public class PGPGenerator {
 
     public static int strength = 4096;
 
-    public static String generate(String pubring, String priring, String id, String pass) throws Exception {
+    public static String generate(String pubring, String priring, String id, String pass, boolean armor) throws Exception {
         PGPKeyRingGenerator krgen = generateKeyRingGenerator(id, pass);
 
         // Generate public key ring, dump to file.
         PGPPublicKeyRing pkr = krgen.generatePublicKeyRing();
-        BufferedOutputStream pubout = new BufferedOutputStream(new FileOutputStream(pubring));
+        BufferedOutputStream pubout;
+        if(armor) {
+            pubout = new BufferedOutputStream(new ArmoredOutputStream(new FileOutputStream(pubring)));
+        } else {
+            pubout = new BufferedOutputStream(new FileOutputStream(pubring));
+        }
         pkr.encode(pubout);
         pubout.close();
 
         // Generate private key, dump to file.
         PGPSecretKeyRing skr = krgen.generateSecretKeyRing();
-        BufferedOutputStream secout = new BufferedOutputStream(new FileOutputStream(priring));
+        BufferedOutputStream secout;
+        if(armor) {
+            secout = new BufferedOutputStream(new ArmoredOutputStream(new FileOutputStream(pubring)));
+        } else {
+            secout = new BufferedOutputStream(new FileOutputStream(pubring));
+        }
         skr.encode(secout);
         secout.close();
         Iterator<PGPPublicKey> it = pkr.getPublicKeys();
