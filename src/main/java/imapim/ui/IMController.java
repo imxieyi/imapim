@@ -22,10 +22,12 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.DataNode;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Node;
+import sun.misc.BASE64Encoder;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeUtility;
 import java.io.*;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Properties;
@@ -64,6 +66,7 @@ public class IMController {
             System.exit(-1);
         }
         messagesDocument = Document.createShell("/");
+        // Auto scroll
         Node autoScrollScript = new DataNode(
                 "<script language=\"javascript\" tyle=\"text/javascript\">" +
                     "function toBottom() {" +
@@ -161,6 +164,39 @@ public class IMController {
         } catch (MessagingException e) {
             log.warning("Failed to send message: " + e.getMessage());
             e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void openImage() {
+        // Show file dialog
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Image");
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image File",
+                "*.png", "*.jpg", "*.jpe", "*.jpeg", "*.gif", "*.webp"));
+        File file = fileChooser.showOpenDialog(stage);
+        // Append image
+        Document doc = Jsoup.parse(input.getHtmlText());
+        try {
+            BASE64Encoder encoder = new BASE64Encoder();
+            FileInputStream fis = new FileInputStream(file);
+            byte[] buffer = new byte[fis.available()];
+            fis.read(buffer);
+            String mimetype = URLConnection.guessContentTypeFromName(file.getName());
+            String encoded = encoder.encode(buffer);
+            DataNode imgNode = new DataNode(
+                    "<img style='max-width:100% !important;' src='data:" + mimetype + ";base64, " + encoded + "'/>"
+            );
+            doc.body().appendChild(imgNode);
+            input.setHtmlText(doc.html());
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Error");
+            alert.setContentText("Failed to open file: " + e.getLocalizedMessage() + "\n" + file.getAbsolutePath());
+            alert.show();
+            log.severe("Failed to open file: " + e.getLocalizedMessage() + "\n" + file.getAbsolutePath());
         }
     }
 

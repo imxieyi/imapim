@@ -9,6 +9,7 @@
    <Button layoutX="536.0" layoutY="368.0" mnemonicParsing="false" onAction="#send" prefHeight="25.0" prefWidth="60.0" text="Send" AnchorPane.bottomAnchor="8.0" AnchorPane.rightAnchor="8.0" />
     <MenuBar layoutX="8.0" layoutY="14.0" prefHeight="25.0" prefWidth="600.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <Menu mnemonicParsing="false" text="File">
+         <MenuItem mnemonicParsing="false" onAction="#openImage" text="Open Image" />
             <MenuItem mnemonicParsing="false" onAction="#saveSession" text="Save Session" />
             <MenuItem mnemonicParsing="false" text="Settings" />
             <SeparatorMenuItem mnemonicParsing="false" />
