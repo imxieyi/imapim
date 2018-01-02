@@ -9,8 +9,6 @@ import org.bouncycastle.openpgp.operator.PGPKeyEncryptionMethodGenerator;
 import org.bouncycastle.openpgp.operator.bc.BcKeyFingerprintCalculator;
 import org.bouncycastle.openpgp.operator.bc.BcPGPDataEncryptorBuilder;
 import org.bouncycastle.openpgp.operator.bc.BcPublicKeyKeyEncryptionMethodGenerator;
-import org.bouncycastle.util.encoders.Hex;
-import org.junit.jupiter.api.Test;
 
 import java.io.*;
 import java.security.SecureRandom;
@@ -108,79 +106,6 @@ public class PGPEncrypt {
         cOut.close();
         out.close();
         return encOut.toByteArray();
-    }
-
-    // What's wrong with following code??????
-//    public byte[] encrypt(byte data[], boolean armor, boolean withIntegrityCheck) throws IOException, PGPException {
-//        // Compress data with zip
-//        ByteArrayInputStream bis = new ByteArrayInputStream(data);
-//        ByteArrayOutputStream bOut = new ByteArrayOutputStream();
-//        PGPCompressedDataGenerator comData = new PGPCompressedDataGenerator(CompressionAlgorithmTags.ZIP);
-//        PGPLiteralDataGenerator lData = new PGPLiteralDataGenerator();
-//        OutputStream pOut = lData.open(comData.open(bOut), PGPLiteralData.BINARY, PGPLiteralData.CONSOLE, new Date(), new byte[1024]);
-//        byte[] buf = new byte[1024];
-//        int len;
-//        while((len = bis.read(buf)) > 0) {
-//            pOut.write(buf, 0, len);
-//        }
-//        lData.close();
-//        byte[] compressed = bOut.toByteArray();
-//        bOut.close();
-//        // Prepare output stream
-//        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-//        OutputStream out = bos;
-//        if(armor) {
-//            out = new ArmoredOutputStream(bos);
-//        }
-//        // Encrypt data with PGP public key
-//        PGPEncryptedDataGenerator encGen = new PGPEncryptedDataGenerator(
-//                new BcPGPDataEncryptorBuilder(PGPEncryptedData.AES_256)
-//                .setWithIntegrityPacket(withIntegrityCheck)
-//                .setSecureRandom(new SecureRandom())
-//        );
-//        encGen.addMethod(new BcPublicKeyKeyEncryptionMethodGenerator(publicKey));
-//        OutputStream cOut = encGen.open(out, compressed);
-//        cOut.write(compressed);
-//        byte[] encrypted = bos.toByteArray();
-//        cOut.close();
-//        if(armor) {
-//            out.close();
-//        }
-//        return encrypted;
-//    }
-
-    @Test
-    void testLoadPublicKeyFromKeyRing() throws IOException, PGPException {
-        loadPublicKey("C:\\msys64\\home\\wez73\\.gnupg\\pubring.gpg", "E6B255D0");
-        System.out.println("Public key ID: " + Long.toHexString(publicKeys.get(0).getKeyID()));
-        System.out.println("\tAlgorithm: " + getAlgorithm(publicKeys.get(0).getAlgorithm()));
-        System.out.println("\tStrength: " + publicKeys.get(0).getBitStrength());
-        System.out.println("\tFingerprint: " + new String(Hex.encode(publicKeys.get(0).getFingerprint())));
-    }
-
-    @Test
-    void testLoadPublicKeyFromTextFile() throws IOException, PGPException {
-        loadPublicKey("C:\\Users\\wez73\\public-key.txt", "E6B255D0");
-        System.out.println("Public key ID: " + Long.toHexString(publicKeys.get(0).getKeyID()));
-        System.out.println("\tAlgorithm: " + getAlgorithm(publicKeys.get(0).getAlgorithm()));
-        System.out.println("\tStrength: " + publicKeys.get(0).getBitStrength());
-        System.out.println("\tFingerprint: " + new String(Hex.encode(publicKeys.get(0).getFingerprint())));
-    }
-
-    @Test
-    void testEncryptArmored() throws IOException, PGPException {
-        loadPublicKey("C:\\Users\\wez73\\public-key.txt", "E6B255D0");
-        String data = "test";
-        byte[] encrypted = encrypt(data.getBytes(), true, false);
-        System.out.println(new String(encrypted));
-    }
-
-    @Test
-    void testEncryptNotArmored() throws IOException, PGPException {
-        loadPublicKey("C:\\Users\\wez73\\public-key.txt", "E6B255D0");
-        String data = "test";
-        byte[] encrypted = encrypt(data.getBytes(), false, false);
-        System.out.println(new String(encrypted));
     }
 
 }

@@ -1,7 +1,6 @@
 package imapim.protocol;
 
 import imapim.data.Email;
-import org.junit.jupiter.api.Test;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -72,16 +71,6 @@ public class SMTPHelper {
         transport.connect(user, password);
         transport.sendMessage(message, message.getAllRecipients());
         transport.close();
-    }
-
-    @Test
-    void testSendMail() throws MessagingException {
-        Email email = new Email();
-        email.from = "im@lattepanda";
-        email.to.add("xieyi@lattepanda");
-        email.subject = "java test";
-        email.content = "java test";
-        getInstance().send(email);
     }
 
 }

@@ -13,7 +13,6 @@ import org.bouncycastle.openpgp.operator.bc.BcPBESecretKeyEncryptorBuilder;
 import org.bouncycastle.openpgp.operator.bc.BcPGPContentSignerBuilder;
 import org.bouncycastle.openpgp.operator.bc.BcPGPDigestCalculatorProvider;
 import org.bouncycastle.openpgp.operator.bc.BcPGPKeyPair;
-import org.junit.jupiter.api.Test;
 
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
@@ -134,12 +133,6 @@ public class PGPGenerator {
         // Add our encryption subkey, together with its signature.
         keyRingGen.addSubKey(rsakp_enc, enchashgen.generate(), null);
         return keyRingGen;
-    }
-
-    @Test
-    void testGenerate() throws Exception {
-        String id = generate("pubring.gpg", "secring.gpg", "gg (gg) <gg@gg.gg>", "111111");
-        System.out.println("Generated encryption key id: " + id);
     }
 
 }

@@ -8,13 +8,9 @@ import org.bouncycastle.openpgp.operator.bc.BcPBESecretKeyDecryptorBuilder;
 import org.bouncycastle.openpgp.operator.bc.BcPGPDigestCalculatorProvider;
 import org.bouncycastle.openpgp.operator.bc.BcPublicKeyDataDecryptorFactory;
 import org.bouncycastle.util.io.Streams;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 
 import java.io.*;
 import java.util.Iterator;
-
-import static imapim.security.PGPEncrypt.getAlgorithm;
 
 public class PGPDecrypt {
 
@@ -104,47 +100,6 @@ public class PGPDecrypt {
             }
         }
         return decrypted;
-    }
-
-    @Test
-    void testLoadPrivateKeyFromKeyRing() throws IOException, PGPException {
-        loadPrivateKey("C:\\msys64\\home\\wez73\\.gnupg\\secring.gpg", "FB2588E3", "123456");
-        System.out.println("Private key ID: " + Long.toHexString(privateKey.getKeyID()));
-        System.out.println("\tAlgorithm: " + getAlgorithm(privateKey.getPublicKeyPacket().getAlgorithm()));
-    }
-
-
-    @Test
-    void testDecryptArmoredData() throws IOException, PGPException {
-        loadPrivateKey("C:\\msys64\\home\\wez73\\.gnupg\\secring.gpg", "FB2588E3", "123456");
-        String data = "ggtest";
-        PGPEncrypt encrypt = new PGPEncrypt();
-        encrypt.loadPublicKey("C:\\msys64\\home\\wez73\\.gnupg\\pubring.gpg", "FB2588E3");
-        byte[] encrypted = encrypt.encrypt(data.getBytes(), true, false);
-        byte[] decrypted = decrypt(encrypted);
-        Assertions.assertEquals(data, new String(decrypted));
-    }
-
-    @Test
-    void testDecryptNotArmoredData() throws IOException, PGPException {
-        loadPrivateKey("C:\\msys64\\home\\wez73\\.gnupg\\secring.gpg", "FB2588E3", "123456");
-        String data = "ggtest";
-        PGPEncrypt encrypt = new PGPEncrypt();
-        encrypt.loadPublicKey("C:\\msys64\\home\\wez73\\.gnupg\\pubring.gpg", "FB2588E3");
-        byte[] encrypted = encrypt.encrypt(data.getBytes(), false, false);
-        byte[] decrypted = decrypt(encrypted);
-        Assertions.assertEquals(data, new String(decrypted));
-    }
-
-    @Test
-    void testDecryptIntegrityCheckData() throws IOException, PGPException {
-        loadPrivateKey("C:\\msys64\\home\\wez73\\.gnupg\\secring.gpg", "FB2588E3", "123456");
-        String data = "ggtest";
-        PGPEncrypt encrypt = new PGPEncrypt();
-        encrypt.loadPublicKey("C:\\msys64\\home\\wez73\\.gnupg\\pubring.gpg", "FB2588E3");
-        byte[] encrypted = encrypt.encrypt(data.getBytes(), false, true);
-        byte[] decrypted = decrypt(encrypted);
-        Assertions.assertEquals(data, new String(decrypted));
     }
 
 }

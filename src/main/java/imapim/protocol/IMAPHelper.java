@@ -3,7 +3,6 @@ package imapim.protocol;
 import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.util.MailSSLSocketFactory;
 import imapim.data.Email;
-import org.junit.jupiter.api.Test;
 
 import javax.mail.*;
 import javax.mail.event.MessageCountEvent;
@@ -216,23 +215,6 @@ public class IMAPHelper extends Observable {
             return null;
         }
         return e;
-    }
-
-    @Test
-    void testReceive() throws MessagingException {
-        ArrayList<Email> emails = getInstance().getMails();
-        for(Email e : emails) {
-            System.out.println(e);
-        }
-        System.out.println("Got " + emails.size() + " emails");
-    }
-
-    static void main(String[] args) {
-        getInstance().addObserver((o, arg) -> {
-            Email e = (Email) arg;
-            System.out.println(e);
-        });
-        getInstance().startListening();
     }
 }
 
