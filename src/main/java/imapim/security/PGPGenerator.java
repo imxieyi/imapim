@@ -45,9 +45,9 @@ public class PGPGenerator {
         PGPSecretKeyRing skr = krgen.generateSecretKeyRing();
         BufferedOutputStream secout;
         if(armor) {
-            secout = new BufferedOutputStream(new ArmoredOutputStream(new FileOutputStream(pubring)));
+            secout = new BufferedOutputStream(new ArmoredOutputStream(new FileOutputStream(priring)));
         } else {
-            secout = new BufferedOutputStream(new FileOutputStream(pubring));
+            secout = new BufferedOutputStream(new FileOutputStream(priring));
         }
         skr.encode(secout);
         secout.close();
