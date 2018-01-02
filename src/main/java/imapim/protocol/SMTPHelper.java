@@ -77,8 +77,8 @@ public class SMTPHelper {
     @Test
     void testSendMail() throws MessagingException {
         Email email = new Email();
-        email.from = "im@lattepanda";
-        email.to.add("xieyi@lattepanda");
+        email.from = getInstance().user;
+        email.to.add(getInstance().user);
         email.subject = "java test";
         email.content = "java test";
         getInstance().send(email);
