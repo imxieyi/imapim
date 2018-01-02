@@ -3,6 +3,7 @@ package imapim.ui;
 import imapim.data.Message;
 import imapim.protocol.IMAPHelper;
 import imapim.protocol.MessageHelper;
+import imapim.protocol.SendMailQueue;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -108,10 +109,14 @@ public class IMController {
         });
         MessageHelper.getInstance().start();
         Platform.runLater(() -> stage.setOnCloseRequest((e) -> {
+            MessageHelper.getInstance().stop();
             if(connected) {
                 IMAPHelper.getInstance().stopListening();
             }
         }));
+        SendMailQueue.getInstance().setCallback((e, m) -> {
+            appendMessage(m, true);
+        });
     }
 
     private void appendMessage(Message m, boolean sent) {
@@ -150,7 +155,6 @@ public class IMController {
         m.content = doc.body().html();
         try {
             MessageHelper.getInstance().send(m);
-            appendMessage(m, true);
             input.setHtmlText("");
         } catch (IOException | PGPException e) {
             log.warning("Failed to encrypt message: " + e.getMessage());
@@ -211,6 +215,7 @@ public class IMController {
     @FXML
     private void exit() {
         stage.close();
+        MessageHelper.getInstance().stop();
         if(connected) {
             IMAPHelper.getInstance().stopListening();
         }

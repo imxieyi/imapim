@@ -85,11 +85,13 @@ public class MessageHelper extends Observable {
             }
         });
         IMAPHelper.getInstance().startListening();
+        SendMailQueue.getInstance().start();
     }
 
     public void stop() {
         IMAPHelper.getInstance().stopListening();
         IMAPHelper.getInstance().deleteObservers();
+        SendMailQueue.getInstance().stop();
     }
 
     public void send(Message m) throws IOException, PGPException, MessagingException {
@@ -100,7 +102,7 @@ public class MessageHelper extends Observable {
         e.from = m.from;
         e.timestamp = m.timestamp;
         e.content = new String(encrypted);
-        SMTPHelper.getInstance().send(e);
+        SendMailQueue.getInstance().add(e, m);
     }
 
 }
