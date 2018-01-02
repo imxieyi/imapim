@@ -90,4 +90,4 @@ hs_err_pid*
 config.properties
 
 out/
-*.gpg
+/*.gpg

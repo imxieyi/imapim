@@ -93,7 +93,7 @@ public class GeneratorController {
         id = id.trim();
         try {
             PGPGenerator.strength = strength.getValue();
-            String keyid = PGPGenerator.generate(pubpath.getText(), pripath.getText(), id, passphrase.getText());
+            String keyid = PGPGenerator.generate(pubpath.getText(), pripath.getText(), id, passphrase.getText(), true);
             log.info("Key generated: " + keyid);
             ButtonType copy = new ButtonType("Copy Key ID", ButtonBar.ButtonData.APPLY);
             ButtonType close = new ButtonType("Close", ButtonBar.ButtonData.CANCEL_CLOSE);
