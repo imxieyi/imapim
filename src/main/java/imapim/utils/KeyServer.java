@@ -51,7 +51,6 @@ public class KeyServer {
             System.out.println("IOException");
         }
         return searchList;
-
     }
 
     public String matchDate(String input) {
@@ -88,6 +87,18 @@ public class KeyServer {
             System.out.println("IO Error");
         }
         return pubKeyContent;
+    }
+
+    public Boolean uploadKey(String pubKey) {
+        Connection con = Jsoup.connect("http://pgp.mit.edu/pks/add");
+        con.data("keytext", pubKey);
+        try {
+            Document doc = con.post();
+            // System.out.println(doc);
+        } catch (IOException e) {
+            return false;
+        }
+        return true;
     }
 
 }
