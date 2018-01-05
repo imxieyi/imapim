@@ -1,10 +1,9 @@
 package imapim.ui;
 
-import imapim.ui.im.IMController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -12,7 +11,7 @@ import java.io.IOException;
 public class IM extends Application {
 
     private Stage primaryStage;
-    private AnchorPane rootLayout;
+    private Pane rootLayout;
 
     @Override
     public void start(Stage primaryStage) {
@@ -23,12 +22,12 @@ public class IM extends Application {
 
     private void initRootLayout() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/contact/contact.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/im/im.fxml"));
             rootLayout = loader.load();
             Scene scene = new Scene(rootLayout);
             primaryStage.setScene(scene);
             primaryStage.show();
-            ((IMController)loader.getController()).setStage(primaryStage);
+            ((StageController)loader.getController()).setStage(primaryStage);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

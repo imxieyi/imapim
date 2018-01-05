@@ -4,6 +4,7 @@ import imapim.data.Message;
 import imapim.protocol.IMAPHelper;
 import imapim.protocol.MessageHelper;
 import imapim.protocol.SendMailQueue;
+import imapim.ui.StageController;
 import imapim.ui.pgp.GeneratorController;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -34,7 +35,7 @@ import java.util.Date;
 import java.util.Properties;
 import java.util.logging.Logger;
 
-public class IMController {
+public class IMController extends StageController {
 
     private static Logger log = Logger.getLogger(IMController.class.getName());
 
@@ -50,7 +51,6 @@ public class IMController {
     private Document messagesDocument;
     private String email;
     private String recipient;
-    private Stage stage;
 
     private boolean connected = false;
 
@@ -258,10 +258,6 @@ public class IMController {
         if(connected) {
             IMAPHelper.getInstance().stopListening();
         }
-    }
-
-    public void setStage(Stage stage) {
-        this.stage = stage;
     }
 
 }

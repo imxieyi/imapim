@@ -1,19 +1,19 @@
 package imapim.ui.pgp;
 
 import imapim.security.PGPGenerator;
+import imapim.ui.StageController;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 
 import java.io.File;
 import java.util.Optional;
 import java.util.logging.Logger;
 
-public class GeneratorController {
+public class GeneratorController extends StageController {
 
     private static Logger log = Logger.getLogger(GeneratorController.class.getName());
 
@@ -31,8 +31,6 @@ public class GeneratorController {
     private PasswordField passphrase;
     @FXML
     private ChoiceBox<Integer> strength;
-
-    private Stage stage;
 
     @FXML
     void initialize() {
@@ -111,18 +109,14 @@ public class GeneratorController {
                 clipboard.setContent(content);
             }
         } catch (Exception e) {
-            log.severe("Failed to generate key: " + e.getLocalizedMessage());
+            log.severe("Failed to generate key: " + e.getMessage());
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText("Failed to generate key!");
-            alert.setContentText(e.getLocalizedMessage());
+            alert.setContentText(e.getMessage());
             alert.show();
         } finally {
             stage.close();
         }
-    }
-
-    public void setStage(Stage stage) {
-        this.stage = stage;
     }
 }

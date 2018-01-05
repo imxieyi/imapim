@@ -1,12 +1,9 @@
 package imapim.ui.contact;
 
+import imapim.ui.StageController;
 import javafx.fxml.FXML;
-import javafx.scene.layout.BorderPane;
 
-public class ContactController {
-
-    @FXML
-    BorderPane pane;
+public class ContactController extends StageController {
 
     @FXML
     private void initialize() {

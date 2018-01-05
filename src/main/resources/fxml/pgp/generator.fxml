@@ -2,52 +2,49 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-<AnchorPane prefHeight="217.0" prefWidth="411.0" stylesheets="@../../css/bootstrap/bootstrap3.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="imapim.ui.pgp.GeneratorController">
-   <TextField fx:id="pubpath" layoutX="194.0" layoutY="16.0" prefHeight="20.0" prefWidth="180.0" text="pubring.gpg" AnchorPane.leftAnchor="156.0" AnchorPane.topAnchor="8.0" />
-   <Label layoutX="14.0" layoutY="18.0" prefHeight="20.0" prefWidth="140.0" text="Public keyring path" AnchorPane.leftAnchor="8.0" AnchorPane.topAnchor="8.0">
-      <font>
-         <Font size="14.0" />
-      </font>
-   </Label>
-   <Label layoutX="14.0" layoutY="39.0" prefHeight="20.0" prefWidth="140.0" text="Private keyring path" AnchorPane.leftAnchor="8.0" AnchorPane.topAnchor="33.0">
-      <font>
-         <Font size="14.0" />
-      </font>
-   </Label>
-   <Label layoutX="14.0" layoutY="58.0" prefHeight="20.0" prefWidth="140.0" text="Name" AnchorPane.leftAnchor="8.0" AnchorPane.topAnchor="58.0">
-      <font>
-         <Font size="14.0" />
-      </font>
-   </Label>
-   <Label layoutX="14.0" layoutY="77.0" prefHeight="20.0" prefWidth="140.0" text="Email" AnchorPane.leftAnchor="8.0" AnchorPane.topAnchor="83.0">
-      <font>
-         <Font size="14.0" />
-      </font>
-   </Label>
-   <Label layoutX="14.0" layoutY="96.0" prefHeight="20.0" prefWidth="140.0" text="Comment" AnchorPane.leftAnchor="8.0" AnchorPane.topAnchor="108.0">
-      <font>
-         <Font size="14.0" />
-      </font>
-   </Label>
-   <Label layoutX="14.0" layoutY="115.0" prefHeight="20.0" prefWidth="140.0" text="Passphrase" AnchorPane.leftAnchor="8.0" AnchorPane.topAnchor="133.0">
-      <font>
-         <Font size="14.0" />
-      </font>
-   </Label>
-   <Button layoutX="106.0" layoutY="169.0" mnemonicParsing="false" onAction="#generate" prefHeight="23.0" prefWidth="73.0" text="Generate" AnchorPane.topAnchor="187.0" />
-   <Button layoutX="236.0" layoutY="162.0" mnemonicParsing="false" onAction="#close" prefHeight="23.0" prefWidth="73.0" text="Cancel" AnchorPane.topAnchor="187.0" />
-   <Button layoutX="345.0" layoutY="8.0" mnemonicParsing="false" onAction="#browsePubkey" text="Browse" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="8.0" />
-   <TextField fx:id="pripath" layoutX="156.0" layoutY="31.0" prefHeight="20.0" prefWidth="180.0" text="secring.gpg" AnchorPane.leftAnchor="156.0" AnchorPane.topAnchor="33.0" />
-   <TextField fx:id="name" layoutX="156.0" layoutY="67.0" prefHeight="20.0" prefWidth="180.0" AnchorPane.leftAnchor="156.0" AnchorPane.topAnchor="58.0" />
-   <TextField fx:id="email" layoutX="156.0" layoutY="82.0" prefHeight="20.0" prefWidth="180.0" AnchorPane.leftAnchor="156.0" AnchorPane.topAnchor="83.0" />
-   <TextField fx:id="comment" layoutX="156.0" layoutY="107.0" prefHeight="20.0" prefWidth="180.0" AnchorPane.leftAnchor="156.0" AnchorPane.topAnchor="108.0" />
-   <Button layoutX="348.0" layoutY="33.0" mnemonicParsing="false" onAction="#browsePrikey" text="Browse" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="33.0" />
-   <PasswordField fx:id="passphrase" layoutX="148.0" layoutY="133.0" prefHeight="20.0" prefWidth="180.0" AnchorPane.leftAnchor="156.0" AnchorPane.topAnchor="133.0" />
-   <Label layoutX="18.0" layoutY="143.0" prefHeight="20.0" prefWidth="140.0" text="RSA key size" AnchorPane.leftAnchor="8.0" AnchorPane.topAnchor="158.0">
-      <font>
-         <Font size="14.0" />
-      </font>
-   </Label>
-   <ChoiceBox fx:id="strength" layoutX="156.0" layoutY="157.0" prefHeight="20.0" prefWidth="180.0" AnchorPane.leftAnchor="156.0" AnchorPane.topAnchor="158.0" />
-</AnchorPane>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="325.0" prefWidth="503.0" stylesheets="@../../css/bootstrap/bootstrap3.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="imapim.ui.pgp.GeneratorController">
+   <bottom>
+      <ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <items>
+          <Button mnemonicParsing="false" onAction="#close" text="Close" />
+            <Button mnemonicParsing="false" onAction="#generate" text="Generate" />
+        </items>
+      </ToolBar>
+   </bottom>
+   <center>
+      <GridPane BorderPane.alignment="CENTER">
+        <columnConstraints>
+          <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" />
+          <ColumnConstraints hgrow="ALWAYS" />
+            <ColumnConstraints hgrow="ALWAYS" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label text="Public keyring path" />
+            <Label text="Privaet keyring path" GridPane.rowIndex="1" />
+            <Label text="Name" GridPane.rowIndex="2" />
+            <Label text="Email" GridPane.rowIndex="3" />
+            <Label text="Comment" GridPane.rowIndex="4" />
+            <Label text="Passphrase" GridPane.rowIndex="5" />
+            <Label text="RSA key strength" GridPane.rowIndex="6" />
+            <Button mnemonicParsing="false" onAction="#browsePubkey" text="Browse" GridPane.columnIndex="2" />
+            <Button mnemonicParsing="false" onAction="#browsePrikey" text="Browse" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <TextField fx:id="pubpath" text="pubring.gpg" GridPane.columnIndex="1" />
+            <TextField fx:id="pripath" text="secring.gpg" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="name" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="email" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <TextField fx:id="comment" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <PasswordField fx:id="passphrase" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <ChoiceBox fx:id="strength" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="6" />
+         </children>
+      </GridPane>
+   </center>
+</BorderPane>
