@@ -11,10 +11,10 @@ public class Person {
 
     public static Person fromJSON(JSONObject object) {
         Person person = new Person();
-        person.name = object.getString("name");
-        person.email = object.getString("email");
-        person.pubkey = object.getString("pubkey");
-        person.keyid = object.getString("keyid");
+        person.name = object.optString("name");
+        person.email = object.optString("email");
+        person.pubkey = object.optString("pubkey");
+        person.keyid = object.optString("keyid");
         return person;
     }
 

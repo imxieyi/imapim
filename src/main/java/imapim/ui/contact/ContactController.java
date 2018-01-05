@@ -1,8 +1,10 @@
 package imapim.ui.contact;
 
 import imapim.data.Person;
+import imapim.security.AESHelper;
 import imapim.ui.StageController;
 import imapim.ui.im.SettingController;
+import imapim.ui.util.PasswordDialog;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -19,6 +21,7 @@ import org.json.JSONObject;
 
 import java.io.*;
 import java.util.Iterator;
+import java.util.Optional;
 
 public class ContactController extends StageController {
 
@@ -27,6 +30,13 @@ public class ContactController extends StageController {
     @FXML
     ListView listView;
     ObservableList<Person> personList = FXCollections.observableArrayList();
+
+    private static final String SALT = ".IbRS8hS.KHO";
+    private static String appPassword = null;
+
+    public static String getPassword() {
+        return appPassword + SALT;
+    }
 
     @FXML
     private void initialize() {
@@ -88,13 +98,34 @@ public class ContactController extends StageController {
 
     private void readList() {
         personList.clear();
-        File f = new File("contact.json");
+        if (appPassword == null) {
+            PasswordDialog prompt = new PasswordDialog();
+            prompt.setTitle("App Password");
+            prompt.setHeaderText("Please input password");
+            Optional<String> result = prompt.showAndWait();
+            if (result.isPresent()) {
+                appPassword = result.get();
+            } else {
+                System.exit(0);
+            }
+        }
+        File f = new File("contact.dat");
         try {
             InputStream is = new FileInputStream(f);
             byte[] b = new byte[is.available()];
             is.read(b);
             is.close();
-            JSONArray contact = new JSONArray(new String(b, "UTF-8"));
+            byte[] decrypted = AESHelper.decrypt(b, getPassword());
+            if (decrypted == null) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error reading contact");
+                alert.setHeaderText("Wrong password!");
+                alert.showAndWait();
+                appPassword = null;
+                readList();
+                return;
+            }
+            JSONArray contact = new JSONArray(new String(decrypted, "utf-8"));
             Iterator<Object> it = contact.iterator();
             while (it.hasNext()) {
                 personList.add(Person.fromJSON((JSONObject) it.next()));
@@ -110,10 +141,11 @@ public class ContactController extends StageController {
 
     private void saveList() {
         JSONArray contact = new JSONArray(personList.stream().map(Person::toJSON).toArray());
-        File f = new File("contact.json");
+        File f = new File("contact.dat");
         try {
             OutputStream os = new FileOutputStream(f);
-            os.write(contact.toString().getBytes());
+            byte[] encrypted = AESHelper.encrypt(contact.toString(), getPassword());
+            os.write(encrypted);
             os.close();
         } catch (IOException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);

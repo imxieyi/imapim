@@ -65,7 +65,7 @@ public class PGPEncrypt {
             }
         }
         if (publicKey == null) {
-            throw new IllegalArgumentException("No encryption key in given key ring");
+            throw new IllegalArgumentException("No encryption key with given ID");
         }
         publicKeys.add(publicKey);
     }

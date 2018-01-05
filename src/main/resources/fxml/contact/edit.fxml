@@ -10,8 +10,8 @@
     <center>
         <GridPane BorderPane.alignment="CENTER">
             <columnConstraints>
-                <ColumnConstraints maxWidth="176.0" minWidth="113.0" prefWidth="118.0"/>
-                <ColumnConstraints hgrow="ALWAYS" maxWidth="299.0" minWidth="258.0" prefWidth="260.0"/>
+                <ColumnConstraints maxWidth="176.0" minWidth="88.0" prefWidth="88.0"/>
+                <ColumnConstraints hgrow="ALWAYS" maxWidth="299.0" minWidth="258.0" prefWidth="284.0"/>
                 <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="115.0" minWidth="76.0"
                                    prefWidth="94.0"/>
             </columnConstraints>
@@ -32,12 +32,12 @@
                         <Font size="16.0"/>
                     </font>
                 </Label>
-                <Label text="Public key file" GridPane.rowIndex="2">
+                <Label text="Public key" GridPane.rowIndex="2">
                     <font>
                         <Font size="16.0"/>
                     </font>
                 </Label>
-                <Label text="Public key ID" GridPane.rowIndex="3">
+                <Label text="Key ID" GridPane.rowIndex="3">
                     <font>
                         <Font size="16.0"/>
                     </font>
@@ -46,7 +46,8 @@
                 <TextField fx:id="email" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
                 <TextField fx:id="pubkey" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
                 <TextField fx:id="keyid" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
-                <Button mnemonicParsing="false" text="Browse" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
+                <Button mnemonicParsing="false" onAction="#browseKey" text="Browse" GridPane.columnIndex="2"
+                        GridPane.rowIndex="2"/>
             </children>
             <padding>
                 <Insets bottom="10.0" left="20.0" right="20.0" top="10.0"/>
@@ -56,7 +57,7 @@
     <bottom>
         <ToolBar nodeOrientation="RIGHT_TO_LEFT" BorderPane.alignment="CENTER">
             <items>
-                <Button fx:id="close" mnemonicParsing="false" text="Cancel"/>
+                <Button mnemonicParsing="false" onAction="#close" text="Cancel"/>
                 <Button mnemonicParsing="false" onAction="#save" text="Save"/>
                 <Button mnemonicParsing="false" text="Search Key"/>
             </items>
