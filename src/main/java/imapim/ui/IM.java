@@ -22,7 +22,7 @@ public class IM extends Application {
 
     private void initRootLayout() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/im/im.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/contact/contact.fxml"));
             rootLayout = loader.load();
             Scene scene = new Scene(rootLayout);
             primaryStage.setScene(scene);

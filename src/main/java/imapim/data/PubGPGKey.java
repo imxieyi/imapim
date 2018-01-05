@@ -1,8 +1,5 @@
 package imapim.data;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-
 public class PubGPGKey{
     private final String fingerPrint;
     private final String  userID;
