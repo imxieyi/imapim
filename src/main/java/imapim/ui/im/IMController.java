@@ -24,6 +24,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.DataNode;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Node;
+import sun.rmi.runtime.Log;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeUtility;
@@ -247,6 +248,21 @@ public class IMController extends StageController {
         stage.setResizable(false);
         ((GeneratorController)loader.getController()).setStage(stage);
         stage.setTitle("PGP Key Pair Generator");
+        stage.setScene(scene);
+        stage.showAndWait();
+    }
+
+    @FXML
+    private void setting() throws IOException {
+        // System.out.println("gdgggggggggggggggggggggggggggg");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/im/setting.fxml"));
+        Scene scene = new Scene(loader.load());
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initStyle(StageStyle.UTILITY);
+        stage.setResizable(false);
+        ((SettingController) loader.getController()).setStage(stage);
+        stage.setTitle("Setting");
         stage.setScene(scene);
         stage.showAndWait();
     }

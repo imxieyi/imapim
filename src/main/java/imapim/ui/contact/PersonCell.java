@@ -24,7 +24,7 @@ public class PersonCell {
             loader.load();
             name.setText(String.format("%s <%s>", person.name, person.email));
             key.setText(String.format("%s (%s)", person.pubkey, person.keyid));
-        } catch(IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }

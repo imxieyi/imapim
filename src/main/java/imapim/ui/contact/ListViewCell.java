@@ -8,7 +8,7 @@ public class ListViewCell extends ListCell<Person> {
     @Override
     protected void updateItem(Person item, boolean empty) {
         super.updateItem(item, empty);
-        if(item != null) {
+        if (item != null) {
             PersonCell cell = new PersonCell(item);
             setGraphic(cell.getBox());
         } else {

@@ -19,7 +19,7 @@ public class EditController extends StageController {
     private Person person = null;
 
     public void setPerson(Person person) {
-        if(person != null) {
+        if (person != null) {
             name.setText(person.name);
             email.setText(person.email);
             pubkey.setText(person.pubkey);
@@ -37,7 +37,7 @@ public class EditController extends StageController {
 
     @FXML
     private void save() {
-        if(validate() == null) {
+        if (validate() == null) {
             person = new Person();
             person.name = name.getText();
             person.email = email.getText();

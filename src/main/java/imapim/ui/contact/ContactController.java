@@ -2,6 +2,7 @@ package imapim.ui.contact;
 
 import imapim.data.Person;
 import imapim.ui.StageController;
+import imapim.ui.im.SettingController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -32,7 +33,7 @@ public class ContactController extends StageController {
         listView.setItems(personList);
         listView.setCellFactory(param -> new ListViewCell());
         listView.setOnMouseClicked(click -> {
-            if(click.getClickCount() == 2) {
+            if (click.getClickCount() == 2) {
             }
         });
         readList();
@@ -46,12 +47,12 @@ public class ContactController extends StageController {
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.initStyle(StageStyle.UTILITY);
         stage.setResizable(false);
-        ((EditController)loader.getController()).setStage(stage);
+        ((EditController) loader.getController()).setStage(stage);
         stage.setTitle("New person");
         stage.setScene(scene);
         stage.showAndWait();
-        Person person = ((EditController)loader.getController()).getPerson();
-        if(person != null) {
+        Person person = ((EditController) loader.getController()).getPerson();
+        if (person != null) {
             personList.add(person);
             saveList();
         }
@@ -59,20 +60,20 @@ public class ContactController extends StageController {
 
     @FXML
     private void editPerson() throws IOException {
-        if(listView.getSelectionModel().getSelectedItem() != null) {
+        if (listView.getSelectionModel().getSelectedItem() != null) {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/contact/edit.fxml"));
             Scene scene = new Scene(loader.load());
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.initStyle(StageStyle.UTILITY);
             stage.setResizable(false);
-            ((EditController)loader.getController()).setStage(stage);
-            ((EditController)loader.getController()).setPerson((Person)listView.getSelectionModel().getSelectedItem());
+            ((EditController) loader.getController()).setStage(stage);
+            ((EditController) loader.getController()).setPerson((Person) listView.getSelectionModel().getSelectedItem());
             stage.setTitle("Edit person");
             stage.setScene(scene);
             stage.showAndWait();
-            Person person = ((EditController)loader.getController()).getPerson();
-            if(person != null) {
+            Person person = ((EditController) loader.getController()).getPerson();
+            if (person != null) {
                 personList.set(personList.indexOf(listView.getSelectionModel().getSelectedItem()), person);
                 saveList();
             }
@@ -95,8 +96,8 @@ public class ContactController extends StageController {
             is.close();
             JSONArray contact = new JSONArray(new String(b, "UTF-8"));
             Iterator<Object> it = contact.iterator();
-            while(it.hasNext()) {
-                personList.add(Person.fromJSON((JSONObject)it.next()));
+            while (it.hasNext()) {
+                personList.add(Person.fromJSON((JSONObject) it.next()));
             }
         } catch (FileNotFoundException ignored) {
         } catch (IOException e) {
@@ -120,6 +121,21 @@ public class ContactController extends StageController {
             alert.setContentText(e.getMessage());
             alert.showAndWait();
         }
+    }
+
+    @FXML
+    private void setting() throws IOException {
+        // System.out.println("gdgggggggggggggggggggggggggggg");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/im/setting.fxml"));
+        Scene scene = new Scene(loader.load());
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initStyle(StageStyle.UTILITY);
+        stage.setResizable(false);
+        ((SettingController) loader.getController()).setStage(stage);
+        stage.setTitle("Setting");
+        stage.setScene(scene);
+        stage.showAndWait();
     }
 
 }
