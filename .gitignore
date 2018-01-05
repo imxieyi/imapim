@@ -91,3 +91,5 @@ config.properties
 
 out/
 /*.gpg
+
+*.json

@@ -1,0 +1,1 @@
+{"imapssl":true,"debug":true,"smtphost":"smtp.yandex.com","smtpport":"465","keyServer":"pgp,mit.edu","privatekeyFile":"secring.gpg","smtpssl":true,"password":"111111","imapport":"993","mailbox":"INBOX","privatekeyPass":"111111","imaphost":"imap.yandex.com","privatekeyId":"D53D32D0","user":"isfangyd@yandex.com","email":"isfangyd@yandex.com"}
