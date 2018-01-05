@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="500.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="imapim.ui.im.SettingController">
+   <children>
+      <GridPane layoutX="91.0" layoutY="110.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="299.0" minWidth="10.0" prefWidth="193.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="320.0" minWidth="10.0" prefWidth="288.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="310.0" minWidth="10.0" prefWidth="96.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label text="SMTP Server">
+               <GridPane.margin>
+                  <Insets />
+               </GridPane.margin>
+            </Label>
+            <Label text="SSL for SMTP" GridPane.rowIndex="2">
+               <GridPane.margin>
+                  <Insets />
+               </GridPane.margin>
+            </Label>
+            <Label text="Email User" GridPane.rowIndex="6">
+               <GridPane.margin>
+                  <Insets />
+               </GridPane.margin>
+            </Label>
+            <Label text="SMTP Port" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets />
+               </GridPane.margin>
+            </Label>
+            <Label text="IMAP Server" GridPane.rowIndex="3">
+               <GridPane.margin>
+                  <Insets />
+               </GridPane.margin>
+            </Label>
+            <Label text="IMAP Port" GridPane.rowIndex="4">
+               <GridPane.margin>
+                  <Insets />
+               </GridPane.margin>
+            </Label>
+            <Label text="SSL for IMAP" GridPane.rowIndex="5">
+               <GridPane.margin>
+                  <Insets />
+               </GridPane.margin>
+            </Label>
+            <Label text="Email Password" GridPane.rowIndex="7">
+               <GridPane.margin>
+                  <Insets />
+               </GridPane.margin>
+            </Label>
+            <Label text="Mailbox" GridPane.rowIndex="9">
+               <GridPane.margin>
+                  <Insets />
+               </GridPane.margin>
+            </Label>
+            <Label text="GPG Private Key" GridPane.rowIndex="10">
+               <GridPane.margin>
+                  <Insets />
+               </GridPane.margin>
+            </Label>
+            <Label text="GPG Passphrase" GridPane.rowIndex="11">
+               <GridPane.margin>
+                  <Insets />
+               </GridPane.margin>
+            </Label>
+            <Label text="Debug Mode" GridPane.rowIndex="12">
+               <GridPane.margin>
+                  <Insets />
+               </GridPane.margin>
+            </Label>
+            <TextField fx:id="SMTPServer" prefHeight="39.0" prefWidth="256.0" GridPane.columnIndex="1" />
+            <TextField fx:id="SMTPPort" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="IMAPServer" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <TextField fx:id="IMAPPort" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <TextField fx:id="emailUser" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            <TextField fx:id="mailBox" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+            <TextField fx:id="privateKey" GridPane.columnIndex="1" GridPane.rowIndex="10">
+               <GridPane.margin>
+                  <Insets />
+               </GridPane.margin>
+            </TextField>
+            <CheckBox fx:id="sslSMTP" mnemonicParsing="false" text="On/Off" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <CheckBox fx:id="sslIMAP" mnemonicParsing="false" text="On/Off" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <CheckBox fx:id="debug" mnemonicParsing="false" text="On/Off" GridPane.columnIndex="1" GridPane.rowIndex="12" />
+            <Button mnemonicParsing="false" onAction="#browsePrivateKey" text="Browse" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="10" />
+            <PasswordField fx:id="emailPassword" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+            <PasswordField fx:id="passPhrase" GridPane.columnIndex="1" GridPane.rowIndex="11" />
+            <Label text="Sender Address" GridPane.rowIndex="8" />
+            <TextField fx:id="SenderAddress" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+         </children>
+         <padding>
+            <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
+         </padding>
+      </GridPane>
+      <Button layoutX="286.0" layoutY="467.0" mnemonicParsing="false" text="Save" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="110.0" />
+      <Button layoutX="398.0" layoutY="467.0" mnemonicParsing="false" text="Cancel" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="20.0" />
+   </children>
+</AnchorPane>
