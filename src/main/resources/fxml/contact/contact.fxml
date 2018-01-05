@@ -1,19 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
 <BorderPane prefHeight="500.0" prefWidth="800.0" stylesheets="@../../css/bootstrap/bootstrap3.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="imapim.ui.contact.ContactController">
     <top><MenuBar BorderPane.alignment="CENTER">
         <menus>
             <Menu mnemonicParsing="false" text="File">
                 <items>
-                    <MenuItem mnemonicParsing="false" text="Close" />
+                  <MenuItem mnemonicParsing="false" text="Settings" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                    <MenuItem mnemonicParsing="false" text="Exit" />
                 </items>
             </Menu>
             <Menu mnemonicParsing="false" text="Edit">
                 <items>
-                    <MenuItem mnemonicParsing="false" text="Delete" />
+                    <MenuItem mnemonicParsing="false" onAction="#newPerson" text="Add" />
+                  <MenuItem mnemonicParsing="false" onAction="#editPerson" text="Edit" />
+                  <MenuItem mnemonicParsing="false" onAction="#deletePerson" text="Delete" />
                 </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Session">
+              <items>
+                <MenuItem mnemonicParsing="false" text="Connect" />
+              </items>
             </Menu>
             <Menu mnemonicParsing="false" text="Help">
                 <items>
@@ -24,5 +35,15 @@
     </MenuBar>
     </top>
    <center>
-      <ListView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
-   </center></BorderPane>
+      <ListView fx:id="listView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+   </center>
+   <bottom>
+      <Label fx:id="status" text="Status">
+         <font>
+            <Font size="16.0" />
+         </font>
+         <BorderPane.margin>
+            <Insets bottom="3.0" left="3.0" top="3.0" />
+         </BorderPane.margin>
+      </Label>
+   </bottom></BorderPane>

@@ -1,7 +1,9 @@
 package imapim.utils;
 
 import imapim.data.PubGPGKey;
-import org.jsoup.*;
+import org.jsoup.Connection;
+import org.jsoup.HttpStatusException;
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
