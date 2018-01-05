@@ -32,14 +32,21 @@ dependencies {
     compile group: 'org.jsoup', name: 'jsoup', version: '1.11.2'
     // https://mvnrepository.com/artifact/com.thoughtworks.xstream/xstream
     compile group: 'com.thoughtworks.xstream', name: 'xstream', version: '1.4.10'
-
+    // https://mvnrepository.com/artifact/org.controlsfx/controlsfx
+    compile group: 'org.controlsfx', name: 'controlsfx', version: '9.0.0'
+    // https://mvnrepository.com/artifact/org.json/json
+    compile group: 'org.json', name: 'json', version: '20171018'
 }
 
  sourceSets {
      main {
-         resources {
+         java {
              srcDirs = ["src/main/java"]
-             includes = ["**/*.fxml"]
+         }
+         resources {
+             srcDirs = ["src/main/java", "src/main/resources"]
+             exclude "**/*.java"
+             includes = ["**/*.fxml", "**/*.css"]
          }
      }
  }

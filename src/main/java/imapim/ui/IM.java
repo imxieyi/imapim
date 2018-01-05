@@ -1,5 +1,6 @@
 package imapim.ui;
 
+import imapim.ui.im.IMController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -22,7 +23,7 @@ public class IM extends Application {
 
     private void initRootLayout() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("im.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/contact/contact.fxml"));
             rootLayout = loader.load();
             Scene scene = new Scene(rootLayout);
             primaryStage.setScene(scene);

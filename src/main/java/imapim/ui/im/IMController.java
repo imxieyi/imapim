@@ -1,9 +1,10 @@
-package imapim.ui;
+package imapim.ui.im;
 
 import imapim.data.Message;
 import imapim.protocol.IMAPHelper;
 import imapim.protocol.MessageHelper;
 import imapim.protocol.SendMailQueue;
+import imapim.ui.pgp.GeneratorController;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,13 +23,13 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.DataNode;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Node;
-import sun.misc.BASE64Encoder;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeUtility;
 import java.io.*;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Date;
 import java.util.Properties;
 import java.util.logging.Logger;
@@ -176,15 +177,17 @@ public class IMController {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image File",
                 "*.png", "*.jpg", "*.jpe", "*.jpeg", "*.gif", "*.webp"));
         File file = fileChooser.showOpenDialog(stage);
+        if(file == null) {
+            return;
+        }
         // Append image
         Document doc = Jsoup.parse(input.getHtmlText());
         try {
-            BASE64Encoder encoder = new BASE64Encoder();
             FileInputStream fis = new FileInputStream(file);
             byte[] buffer = new byte[fis.available()];
             fis.read(buffer);
             String mimetype = URLConnection.guessContentTypeFromName(file.getName());
-            String encoded = encoder.encode(buffer);
+            String encoded = Base64.getEncoder().encodeToString(buffer);
             DataNode imgNode = new DataNode(
                     "<img style='max-width:100% !important;' src='data:" + mimetype + ";base64, " + encoded + "'/>"
             );
@@ -236,7 +239,7 @@ public class IMController {
 
     @FXML
     private void genKey() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("generator.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/pgp/generator.fxml"));
         Scene scene = new Scene(loader.load());
         Stage stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);

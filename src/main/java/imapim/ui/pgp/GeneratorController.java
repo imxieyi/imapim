@@ -1,4 +1,4 @@
-package imapim.ui;
+package imapim.ui.pgp;
 
 import imapim.security.PGPGenerator;
 import javafx.collections.FXCollections;

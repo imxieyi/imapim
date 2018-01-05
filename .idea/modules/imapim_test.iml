@@ -17,6 +17,8 @@
     <orderEntry type="library" name="Gradle: com.sun.mail:javax.mail:1.6.0" level="project" />
     <orderEntry type="library" name="Gradle: org.jsoup:jsoup:1.11.2" level="project" />
     <orderEntry type="library" name="Gradle: com.thoughtworks.xstream:xstream:1.4.10" level="project" />
+    <orderEntry type="library" name="Gradle: org.controlsfx:controlsfx:9.0.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.json:json:20171018" level="project" />
     <orderEntry type="library" name="Gradle: org.junit.platform:junit-platform-engine:1.0.2" level="project" />
     <orderEntry type="library" name="Gradle: org.junit.jupiter:junit-jupiter-api:5.0.2" level="project" />
     <orderEntry type="library" name="Gradle: javax.activation:activation:1.1" level="project" />
