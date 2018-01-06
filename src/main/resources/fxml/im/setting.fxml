@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <AnchorPane prefHeight="550.0" stylesheets="@../../css/bootstrap/bootstrap3.css"
             xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="imapim.ui.im.SettingController">
+            fx:controller="imapim.ui.util.SettingController">
    <children>
       <GridPane layoutX="91.0" layoutY="110.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>

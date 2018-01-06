@@ -3,7 +3,7 @@ package imapim.ui.contact;
 import imapim.data.Person;
 import imapim.security.AESHelper;
 import imapim.ui.StageController;
-import imapim.ui.im.SettingController;
+import imapim.ui.util.SettingController;
 import imapim.ui.util.PasswordDialog;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

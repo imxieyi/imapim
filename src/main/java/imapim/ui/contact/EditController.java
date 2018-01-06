@@ -6,11 +6,17 @@ import imapim.security.PGPEncrypt;
 import imapim.ui.StageController;
 import imapim.ui.pgp.KeyIDListHelper;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.File;
+import java.io.IOException;
 
 public class EditController extends StageController {
 
@@ -118,6 +124,21 @@ public class EditController extends StageController {
     @FXML
     private void close() {
         stage.close();
+    }
+
+    @FXML
+    private void searchForPubKey() throws IOException {
+        // System.out.println("gdgggggggggggggggggggggggggggg");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/util/SearchPubKey.fxml"));
+        Scene scene = new Scene(loader.load());
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initStyle(StageStyle.UTILITY);
+        stage.setResizable(false);
+        ((SearchPubKeyController) loader.getController()).setStage(stage);
+        stage.setTitle("Search For a Public Key");
+        stage.setScene(scene);
+        stage.showAndWait();
     }
 
 }
