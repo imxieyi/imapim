@@ -4,6 +4,7 @@ import imapim.data.Email;
 import imapim.data.Person;
 import imapim.security.PGPEncrypt;
 import imapim.ui.StageController;
+import imapim.ui.pgp.KeyIDListHelper;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
@@ -68,6 +69,31 @@ public class EditController extends StageController {
         File file = fileChooser.showOpenDialog(stage);
         if (file != null) {
             pubkey.setText(file.getAbsolutePath());
+        }
+    }
+
+    @FXML
+    private void selectKey() {
+        String msg = null;
+        if (pubkey.getText().length() <= 0) {
+            msg = "Please input public key path!";
+        } else {
+            try {
+                String id = KeyIDListHelper.selectID(pubkey.getText(), true);
+                if (id == null) {
+                    msg = "No public found in given file!";
+                } else if (!id.equals("")) {
+                    keyid.setText(id);
+                }
+            } catch (Exception e) {
+                msg = e.getMessage();
+            }
+        }
+        if (msg != null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setContentText(msg);
+            alert.show();
         }
     }
 
