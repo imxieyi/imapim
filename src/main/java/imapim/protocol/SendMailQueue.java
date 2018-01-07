@@ -1,15 +1,15 @@
 package imapim.protocol;
 
-import imapim.data.Email;
-import imapim.data.Message;
+import imapim.data.ChatMessage;
 
 import javax.mail.MessagingException;
+import java.util.Observable;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Semaphore;
 import java.util.logging.Logger;
 
-public class SendMailQueue {
+public class SendMailQueue extends Observable {
 
     Logger log = Logger.getLogger(SendMailQueue.class.getName());
 
@@ -22,37 +22,31 @@ public class SendMailQueue {
         return ourInstance;
     }
 
-    private Queue<Email> emailQueue = new ConcurrentLinkedQueue<>();
-    private Queue<Message> messageQueue = new ConcurrentLinkedQueue<>();
+    private Queue<ChatMessage> cmQueue = new ConcurrentLinkedQueue<>();
     private Semaphore semaphore = new Semaphore(0);
     private Thread sendThread;
-    private SendMailCallback sendCallback;
 
     private SendMailQueue() {
     }
 
-    public void add(Email mail, Message message) {
-        emailQueue.add(mail);
-        messageQueue.add(message);
+    public void add(ChatMessage cm) {
+        cmQueue.add(cm);
         semaphore.release();
     }
 
     public void start() {
-        emailQueue.clear();
+        cmQueue.clear();
         sendThread = new Thread(() -> {
             while(!Thread.interrupted()) {
-                Email email = null;
-                Message message = null;
+                ChatMessage cm = null;
                 try {
                     semaphore.acquire();
-                    email = emailQueue.poll();
-                    message = messageQueue.poll();
-                    SMTPHelper.getInstance().send(email);
-                    if(sendCallback != null) {
-                        sendCallback.cb(email, message);
-                    }
+                    cm = cmQueue.poll();
+                    SMTPHelper.getInstance().send(cm.mail);
+                    setChanged();
+                    notifyObservers(cm);
                 } catch (MessagingException e) {
-                    log.severe("Failed to send email: " + e.getLocalizedMessage() + "\n" + email);
+                    log.severe("Failed to send email: " + e.getLocalizedMessage() + "\n" + cm.mail);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 }
@@ -63,10 +57,6 @@ public class SendMailQueue {
 
     public void stop() {
         sendThread.interrupt();
-    }
-
-    public void setCallback(SendMailCallback callback) {
-        sendCallback = callback;
     }
 
 }

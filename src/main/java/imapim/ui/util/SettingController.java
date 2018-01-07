@@ -2,6 +2,7 @@ package imapim.ui.util;
 
 import imapim.data.Setting;
 import imapim.security.PGPDecrypt;
+import imapim.ui.IMHelper;
 import imapim.ui.StageController;
 import imapim.ui.pgp.KeyIDListHelper;
 import javafx.fxml.FXML;
@@ -144,6 +145,8 @@ public class SettingController extends StageController {
         json.put("keyServer", keyServer.getText());
         Setting.saveConfig(json);
         stage.close();
+        Setting.instance = Setting.loadConfig();
+        IMHelper.getInstance().reload();
     }
 
     @FXML

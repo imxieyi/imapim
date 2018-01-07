@@ -24,10 +24,10 @@ public class IM extends Application {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/contact/contact.fxml"));
             rootLayout = loader.load();
+            ((StageController) loader.getController()).setStage(primaryStage);
             Scene scene = new Scene(rootLayout);
             primaryStage.setScene(scene);
             primaryStage.show();
-            ((StageController)loader.getController()).setStage(primaryStage);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

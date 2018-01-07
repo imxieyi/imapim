@@ -17,10 +17,10 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 public class EditController extends StageController {
 
@@ -62,8 +62,7 @@ public class EditController extends StageController {
             return "Please input public key path!";
         }
         try {
-            PGPEncrypt encrypt = new PGPEncrypt();
-            encrypt.loadPublicKey(pubkey.getText(), keyid.getText());
+            PGPEncrypt.getPublicKey(pubkey.getText(), keyid.getText());
         } catch (Exception e) {
             return e.getMessage();
         }

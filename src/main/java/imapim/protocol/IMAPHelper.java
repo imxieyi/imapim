@@ -3,13 +3,12 @@ package imapim.protocol;
 import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.util.MailSSLSocketFactory;
 import imapim.data.Email;
+import imapim.data.Setting;
 
 import javax.mail.*;
 import javax.mail.event.MessageCountEvent;
 import javax.mail.event.MessageCountListener;
 import javax.mail.search.FlagTerm;
-import java.io.File;
-import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Observable;
@@ -29,34 +28,39 @@ public class IMAPHelper extends Observable {
         return ourInstance;
     }
 
-    private Properties props = new Properties();
+    private Properties props;
     private String user;
     private String password;
     private String mailbox;
 
     private IMAPHelper() {
-        Properties config = new Properties();
+        reload();
+    }
+
+    public void reload() {
+        if (Setting.instance == null) {
+            return;
+        }
+        props = new Properties();
         try {
-            config.load(new FileInputStream(new File("config.properties")));
             props.setProperty("mail.transport.protocol", "imap");
-            if(config.getProperty("imapssl").equals("true")) {
-                MailSSLSocketFactory socketFactory= new MailSSLSocketFactory();
+            if (Setting.instance.optBoolean("imapssl", false)) {
+                MailSSLSocketFactory socketFactory = new MailSSLSocketFactory();
                 socketFactory.setTrustAllHosts(true);
                 props.put("mail.imap.starttls.enable", "true");
                 props.setProperty("mail.imap.ssl.enable", "true");
-                props.put("mail.imap.socketFactory.port", config.getProperty("imapport"));
+                props.put("mail.imap.socketFactory.port", Setting.instance.optString("imapport", "993"));
                 props.put("mail.imaps.ssl.socketFactory", socketFactory);
 //                props.put("mail.imap.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
             }
-            props.setProperty("mail.imap.host", config.getProperty("imaphost"));
-            props.setProperty("mail.imap.port", config.getProperty("imapport"));
-            props.setProperty("mail.debug", config.getProperty("debug"));
-            user = config.getProperty("user");
-            password = config.getProperty("password");
-            mailbox = config.getProperty("mailbox");
+            props.setProperty("mail.imap.host", Setting.instance.optString("imaphost"));
+            props.setProperty("mail.imap.port", Setting.instance.optString("imapport", "993"));
+            props.setProperty("mail.debug", Setting.instance.optBoolean("debug", false) ? "true" : "false");
+            user = Setting.instance.optString("user");
+            password = Setting.instance.optString("password");
+            mailbox = Setting.instance.optString("mailbox", "INBOX");
         } catch (Exception e) {
             e.printStackTrace();
-            System.exit(-1);
         }
     }
 
@@ -161,7 +165,7 @@ public class IMAPHelper extends Observable {
             if(folder != null) {
                 folder.close();
             }
-        } catch (MessagingException ignored) {
+        } catch (Exception ignored) {
         }
     }
 

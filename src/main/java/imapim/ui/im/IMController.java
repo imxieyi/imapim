@@ -1,19 +1,16 @@
 package imapim.ui.im;
 
 import imapim.data.Message;
-import imapim.protocol.IMAPHelper;
+import imapim.data.Person;
+import imapim.data.Setting;
 import imapim.protocol.MessageHelper;
-import imapim.protocol.SendMailQueue;
+import imapim.ui.IMHelper;
 import imapim.ui.StageController;
-import imapim.ui.pgp.GeneratorController;
-import imapim.ui.util.SettingController;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
 import javafx.scene.web.HTMLEditor;
 import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
@@ -24,19 +21,16 @@ import org.bouncycastle.openpgp.PGPException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.DataNode;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Node;
 
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeUtility;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Date;
-import java.util.Properties;
+import java.util.*;
 import java.util.logging.Logger;
 
-public class IMController extends StageController {
+public class IMController extends StageController implements Observer {
 
     private static Logger log = Logger.getLogger(IMController.class.getName());
 
@@ -44,108 +38,32 @@ public class IMController extends StageController {
     private WebView messages;
     @FXML
     private HTMLEditor input;
-    @FXML
-    private Label statusLabel;
-    @FXML
-    private MenuItem connect;
+    private Document doc = Document.createShell("/");
+    public Person person;
 
-    private Document messagesDocument;
-    private String email;
-    private String recipient;
-
-    private boolean connected = false;
+    public IMController(Person p) {
+        person = p;
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/im/im.fxml"));
+        Scene scene = null;
+        try {
+            loader.setController(this);
+            scene = new Scene(loader.load());
+            stage = new Stage();
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.initStyle(StageStyle.DECORATED);
+            stage.setTitle(String.format("%s <%s>", p.name, p.email));
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @FXML
     void initialize() {
         input.setHtmlText("");
-        Properties prop = new Properties();
-        try {
-            prop.load(new FileInputStream(new File("config.properties")));
-            email = prop.getProperty("email");
-            recipient = prop.getProperty("recipient");
-        } catch (IOException e) {
-            log.severe("Failed to load config");
-            System.exit(-1);
-        }
-        messagesDocument = Document.createShell("/");
-        // Auto scroll
-        Node autoScrollScript = new DataNode(
-                "<script language=\"javascript\" tyle=\"text/javascript\">" +
-                    "function toBottom() {" +
-                        "window.scrollTo(0, document.body.scrollHeight);" +
-                    "}" +
-                "</script>"
-        );
-        messagesDocument.head().appendChild(autoScrollScript);
-        messagesDocument.body().attr("onload", "toBottom()");
-        // Start listening to messages
-        MessageHelper.getInstance().addObserver((o, arg) -> {
-            Message m = (Message) arg;
-            log.fine("Got new message: " + m.content);
-            appendMessage(m, false);
-            stage.toFront();
-        });
-        IMAPHelper.getInstance().connectionStatus.addObserver((o, arg) -> {
-            String status = (String) arg;
-            String stat = "";
-            connected = true;
-            switch (status) {
-                case "connecting":
-                    stat = "Connecting...";
-                    break;
-                case "connected":
-                    stat = "Connected";
-                    break;
-                case "disconnected":
-                    stat = "Disconnected";
-                    connected = false;
-                    break;
-                case "lost":
-                    stat = "Connection lost";
-                    break;
-            }
-            if(connected) {
-                Platform.runLater(() -> connect.setText("Disconnect"));
-            } else {
-                Platform.runLater(() -> connect.setText("Connect"));
-            }
-            String finalStat = stat;
-            Platform.runLater(() -> statusLabel.setText(finalStat));
-        });
-        MessageHelper.getInstance().start();
-        Platform.runLater(() -> stage.setOnCloseRequest((e) -> {
-            MessageHelper.getInstance().stop();
-            if(connected) {
-                IMAPHelper.getInstance().stopListening();
-            }
-        }));
-        SendMailQueue.getInstance().setCallback((e, m) -> {
-            appendMessage(m, true);
-        });
-    }
-
-    private void appendMessage(Message m, boolean sent) {
-        Node mNode = new DataNode(m.content);
-        String color = "blue";
-        if (sent) color = "green";
-        // Fix sender display
-        try {
-            m.from = MimeUtility.decodeText(m.from);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        m.from = m.from.replaceAll("<","&lt;");
-        m.from = m.from.replaceAll(">","&gt;");
-        // Timestamp & Sender
-        Node tNode = new DataNode(
-                "\n<p><font face=\"Arial\" color=\"" + color + "\" size=\"2\"><b>" +
-                m.from + "  " +
-                m.timestamp.toString() +
-                "</b></font></p>\n"
-        );
-        messagesDocument.body().appendChild(tNode);
-        messagesDocument.body().appendChild(mNode);
-        Platform.runLater(() -> messages.getEngine().loadContent(messagesDocument.toString()));
+        Platform.runLater(() -> stage.setOnCloseRequest((e) -> IMHelper.getInstance().closeWindow(this)));
+        IMHelper.getInstance().openWindow(this);
     }
 
     @FXML
@@ -153,19 +71,23 @@ public class IMController extends StageController {
         Document doc = Jsoup.parse(input.getHtmlText());
         log.fine("Html: " + doc.body().html());
         Message m = new Message();
-        m.from = email;
+        m.from = Setting.instance.getString("email");
         m.to = new ArrayList<>();
-        m.to.add(recipient);
+        m.to.add(person.email);
         m.timestamp = new Date();
         m.content = doc.body().html();
         try {
             MessageHelper.getInstance().send(m);
             input.setHtmlText("");
+        } catch (NullPointerException e) {
+            log.severe("No public found for " + person.email);
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Error");
+            alert.setContentText("Please add public key to this person!");
+            alert.show();
         } catch (IOException | PGPException e) {
-            log.warning("Failed to encrypt message: " + e.getMessage());
-        } catch (MessagingException e) {
-            log.warning("Failed to send message: " + e.getMessage());
-            e.printStackTrace();
+            log.severe("Failed to encrypt message: " + e.getMessage());
         }
     }
 
@@ -214,7 +136,7 @@ public class IMController extends StageController {
         if(file != null) {
             try {
                 FileOutputStream fos = new FileOutputStream(file);
-                Document tmp = messagesDocument.clone();
+                Document tmp = doc.clone();
                 tmp.body().removeAttr("onload");
                 tmp.head().childNodes().get(0).remove();
                 fos.write(tmp.html().getBytes());
@@ -230,50 +152,15 @@ public class IMController extends StageController {
     }
 
     @FXML
-    private void connectClicked() {
-        if(connected) {
-            MessageHelper.getInstance().stop();
-        } else {
-            MessageHelper.getInstance().start();
-        }
-    }
-
-    @FXML
-    private void genKey() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/pgp/generator.fxml"));
-        Scene scene = new Scene(loader.load());
-        Stage stage = new Stage();
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.initStyle(StageStyle.UTILITY);
-        stage.setResizable(false);
-        ((GeneratorController)loader.getController()).setStage(stage);
-        stage.setTitle("PGP Key Pair Generator");
-        stage.setScene(scene);
-        stage.showAndWait();
-    }
-
-    @FXML
-    private void setting() throws IOException {
-        // System.out.println("gdgggggggggggggggggggggggggggg");
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/im/setting.fxml"));
-        Scene scene = new Scene(loader.load());
-        Stage stage = new Stage();
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.initStyle(StageStyle.UTILITY);
-        stage.setResizable(false);
-        ((SettingController) loader.getController()).setStage(stage);
-        stage.setTitle("Setting");
-        stage.setScene(scene);
-        stage.showAndWait();
-    }
-
-    @FXML
     private void exit() {
         stage.close();
-        MessageHelper.getInstance().stop();
-        if(connected) {
-            IMAPHelper.getInstance().stopListening();
-        }
+        IMHelper.getInstance().closeWindow(this);
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        doc = (Document) arg;
+        Platform.runLater(() -> messages.getEngine().loadContent(doc.toString()));
     }
 
 }

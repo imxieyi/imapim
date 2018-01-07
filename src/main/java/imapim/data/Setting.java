@@ -11,6 +11,9 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 
 public class Setting {
+
+    public static JSONObject instance = loadConfig();
+
     public static JSONObject loadConfig() {
         File f = new File("config.dat");
         if(f.exists()){
@@ -36,6 +39,7 @@ public class Setting {
             FileOutputStream fos = new FileOutputStream(f);
             fos.write(AESHelper.encrypt(json.toString(), ContactController.getPassword()));
             fos.close();
+            instance = json;
             return true;
         }catch (Exception e){
             return false;

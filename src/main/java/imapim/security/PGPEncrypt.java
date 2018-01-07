@@ -48,7 +48,7 @@ public class PGPEncrypt {
 
     private ArrayList<PGPPublicKey> publicKeys = new ArrayList<>();
 
-    public void loadPublicKey(String path, String id) throws IOException, PGPException {
+    public static PGPPublicKey getPublicKey(String path, String id) throws IOException, PGPException {
         InputStream is = PGPUtil.getDecoderStream(new FileInputStream(path));
         KeyFingerPrintCalculator calculator = new BcKeyFingerprintCalculator();
         PGPPublicKeyRingCollection keyRings = new PGPPublicKeyRingCollection(is, calculator);
@@ -67,7 +67,15 @@ public class PGPEncrypt {
         if (publicKey == null) {
             throw new IllegalArgumentException("No encryption key with given ID");
         }
-        publicKeys.add(publicKey);
+        return publicKey;
+    }
+
+    public void addPublicKey(String path, String id) throws IOException, PGPException {
+        publicKeys.add(getPublicKey(path, id));
+    }
+
+    public void addPublicKey(PGPPublicKey key) throws IOException, PGPException {
+        publicKeys.add(key);
     }
 
     public byte[] encrypt(byte data[], boolean armor, boolean withIntegrityCheck) throws IOException, PGPException {
