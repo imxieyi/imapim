@@ -25,9 +25,9 @@ import javafx.stage.StageStyle;
 import org.bouncycastle.openpgp.PGPException;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.jsoup.nodes.Document;
 
 import java.io.*;
-import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Optional;
@@ -40,8 +40,8 @@ public class ContactController extends StageController implements Observer {
     @FXML
     MenuItem connect;
     @FXML
-    ListView listView;
-    ObservableList<Person> personList = FXCollections.observableArrayList();
+    ListView<Person> listView;
+    private ObservableList<Person> personList = FXCollections.observableArrayList();
 
     private static final String SALT = ".IbRS8hS.KHO";
     private static String appPassword = null;
@@ -57,7 +57,7 @@ public class ContactController extends StageController implements Observer {
         listView.setCellFactory(param -> new ListViewCell());
         listView.setOnMouseClicked(click -> {
             if (click.getClickCount() == 2) {
-                Person p = (Person) listView.getSelectionModel().getSelectedItem();
+                Person p = listView.getSelectionModel().getSelectedItem();
                 if (p != null) {
                     new IMController(p);
                 }
@@ -134,15 +134,17 @@ public class ContactController extends StageController implements Observer {
             stage.initStyle(StageStyle.UTILITY);
             stage.setResizable(false);
             ((EditController) loader.getController()).setStage(stage);
-            ((EditController) loader.getController()).setPerson((Person) listView.getSelectionModel().getSelectedItem());
+            ((EditController) loader.getController()).setPerson(listView.getSelectionModel().getSelectedItem());
             stage.setTitle("Edit person");
             stage.setScene(scene);
             stage.showAndWait();
             Person person = ((EditController) loader.getController()).getPerson();
             if (person != null) {
-                IMHelper.getInstance().remove((Person) listView.getSelectionModel().getSelectedItem());
+                Document content = IMHelper.getInstance().getChat(listView.getSelectionModel().getSelectedItem()).content;
+                IMHelper.getInstance().remove(listView.getSelectionModel().getSelectedItem());
                 personList.set(personList.indexOf(listView.getSelectionModel().getSelectedItem()), person);
                 IMHelper.getInstance().add(person);
+                IMHelper.getInstance().getChat(person).content = content;
                 saveList();
             }
         }
@@ -188,9 +190,8 @@ public class ContactController extends StageController implements Observer {
                 return;
             }
             JSONArray contact = new JSONArray(new String(decrypted, "utf-8"));
-            Iterator<Object> it = contact.iterator();
-            while (it.hasNext()) {
-                Person p = Person.fromJSON((JSONObject) it.next());
+            for (Object aContact : contact) {
+                Person p = Person.fromJSON((JSONObject) aContact);
                 personList.add(p);
                 IMHelper.getInstance().add(p);
             }
@@ -211,6 +212,7 @@ public class ContactController extends StageController implements Observer {
         try {
             OutputStream os = new FileOutputStream(f);
             byte[] encrypted = AESHelper.encrypt(contact.toString(), getPassword());
+            assert encrypted != null;
             os.write(encrypted);
             os.close();
         } catch (IOException e) {
@@ -266,7 +268,7 @@ public class ContactController extends StageController implements Observer {
         stage.close();
     }
 
-    Semaphore semaphore = new Semaphore(1);
+    private Semaphore semaphore = new Semaphore(1);
 
     @Override
     public void update(Observable o, Object arg) {
