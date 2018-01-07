@@ -2,9 +2,11 @@ package imapim.ui.contact;
 
 import imapim.data.Email;
 import imapim.data.Person;
+import imapim.data.PubGPGKey;
 import imapim.security.PGPEncrypt;
 import imapim.ui.StageController;
 import imapim.ui.pgp.KeyIDListHelper;
+import imapim.utils.KeyServer;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -15,8 +17,10 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class EditController extends StageController {
 
@@ -135,10 +139,34 @@ public class EditController extends StageController {
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.initStyle(StageStyle.UTILITY);
         stage.setResizable(false);
-        ((SearchPubKeyController) loader.getController()).setStage(stage);
+        SearchPubKeyController controller = (SearchPubKeyController) loader.getController();
+        controller.setStage(stage);
         stage.setTitle("Search For a Public Key");
         stage.setScene(scene);
         stage.showAndWait();
+        PubGPGKey result = SearchPubKeyController.getSelected();
+        savePubKey(result);
     }
 
+    private void savePubKey(PubGPGKey result) throws IOException {
+        if (result == null) {
+            return;
+        }
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save Public Keyring");
+        fileChooser.setInitialFileName("pubring.gpg");
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("GPG Keyring", "*.gpg"));
+        File file = fileChooser.showSaveDialog(stage);
+        if (file != null) {
+            KeyServer server = KeyServer.getInstance();
+            String pubKey = server.getKeyContent(result.getFingerPrint());
+            // System.out.println(file.getAbsoluteFile());
+            FileWriter fileWriter = new FileWriter(file.getAbsoluteFile());
+            PrintWriter printWriter = new PrintWriter(fileWriter);
+            printWriter.print(pubKey);
+            printWriter.close();
+            pubkey.setText(file.getAbsolutePath());
+        }
+    }
 }

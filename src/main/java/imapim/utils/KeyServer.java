@@ -77,7 +77,7 @@ public class KeyServer {
     }
 
     public String getKeyContent(String keyID) {
-        String contentURL = "http://" + serverHost + "/pks/lookup?op=get&search=0x";
+        String contentURL = "http://" + serverHost + "/pks/lookup?op=get&search=0x" ;
         Document doc = null;
         String pubKeyContent = "";
         try {

@@ -11,6 +11,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+
 import java.util.ArrayList;
 
 public class SearchPubKeyController extends StageController {
@@ -23,7 +24,18 @@ public class SearchPubKeyController extends StageController {
     @FXML
     private TextField keyword;
 
+    private static boolean selected = false;
+    private static PubGPGKey selectedItem = null;
+
     private ObservableList<PubGPGKey> resultList = FXCollections.observableArrayList();
+
+    public static PubGPGKey getSelected() {
+        if (selected) {
+            return selectedItem;
+        } else {
+            return null;
+        }
+    }
 
     @FXML
     void initialize() {
@@ -32,12 +44,15 @@ public class SearchPubKeyController extends StageController {
         resultTable.setRowFactory(tv -> {
             TableRow<PubGPGKey> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
-                if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
+                if (event.getClickCount() == 2 && (!row.isEmpty())) {
                     PubGPGKey rowData = row.getItem();
-                    System.out.println("Double click on: "+rowData.getFingerPrint());
+                    System.out.println("Double click on: " + rowData.getFingerPrint());
+                    selected = true;
+                    selectedItem = rowData;
+                    stage.close();
                 }
             });
-            return row ;
+            return row;
         });
         //System.out.println("aaa");
     }
