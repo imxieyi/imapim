@@ -5,14 +5,12 @@ import imapim.security.AESHelper;
 import imapim.ui.contact.ContactController;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
+import java.io.*;
+import java.util.Objects;
 
 public class Setting {
 
-    public static JSONObject instance = loadConfig();
+    public static JSONObject instance = null;
 
     public static JSONObject loadConfig() {
         File f = new File("config.dat");
@@ -21,12 +19,16 @@ public class Setting {
                 InputStream is = new FileInputStream(f);
                 byte[] bytes = new byte[is.available()];
                 if (is.read(bytes)>= 0) {
-                    String jsonTxt = new String(AESHelper.decrypt(bytes, ContactController.getPassword()), "UTF-8");
+                    byte[] decrypted = AESHelper.decrypt(bytes, ContactController.getPassword());
+                    if (decrypted == null) {
+                        throw new IllegalArgumentException("Wrong password");
+                    }
+                    String jsonTxt = new String(decrypted, "UTF-8");
                     return new JSONObject(jsonTxt);
                 }
                 is.close();
                 // System.out.println(jsonTxt);
-            }catch (Exception e){
+            } catch (IOException e) {
                 return null;
             }
         }
@@ -37,7 +39,7 @@ public class Setting {
         File f = new File("config.dat");
         try {
             FileOutputStream fos = new FileOutputStream(f);
-            fos.write(AESHelper.encrypt(json.toString(), ContactController.getPassword()));
+            fos.write(Objects.requireNonNull(AESHelper.encrypt(json.toString(), ContactController.getPassword())));
             fos.close();
             instance = json;
             return true;

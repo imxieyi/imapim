@@ -4,16 +4,23 @@ import imapim.data.Setting;
 import imapim.security.PGPDecrypt;
 import imapim.ui.IMHelper;
 import imapim.ui.StageController;
+import imapim.ui.pgp.GeneratorController;
 import imapim.ui.pgp.KeyIDListHelper;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.IOException;
 
 public class SettingController extends StageController {
     @FXML
@@ -172,6 +179,20 @@ public class SettingController extends StageController {
             alert.setContentText(msg);
             alert.show();
         }
+    }
+
+    @FXML
+    private void generator() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/pgp/generator.fxml"));
+        Scene scene = new Scene(loader.load());
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initStyle(StageStyle.UTILITY);
+        stage.setResizable(false);
+        ((GeneratorController) loader.getController()).setStage(stage);
+        stage.setTitle("PGP Key Pair Generator");
+        stage.setScene(scene);
+        stage.showAndWait();
     }
 
     @FXML

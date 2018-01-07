@@ -55,7 +55,7 @@ public class EditController extends StageController {
         if (email.getText().length() <= 0) {
             return "Please input email!";
         }
-        if (!Email.validate(email.getText())) {
+        if (!Email.validateAddress(email.getText())) {
             return "Invalid email address!";
         }
         if (pubkey.getText().length() <= 0) {
@@ -138,7 +138,7 @@ public class EditController extends StageController {
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.initStyle(StageStyle.UTILITY);
         stage.setResizable(false);
-        SearchPubKeyController controller = (SearchPubKeyController) loader.getController();
+        SearchPubKeyController controller = loader.getController();
         controller.setStage(stage);
         stage.setTitle("Search For a Public Key");
         stage.setScene(scene);

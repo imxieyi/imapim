@@ -14,15 +14,14 @@ public class Email {
 
     @Override
     public String toString() {
-        String sb = ("Time: " + timestamp.toString() + "\n") +
+        return ("Time: " + timestamp.toString() + "\n") +
                 "From: " + from + "\n" +
                 "To: " + to + "\n" +
                 "Subject: " + subject + "\n" +
                 "Content:\n" + content + "\n";
-        return sb;
     }
 
-    public static boolean validate(String email) {
+    public static boolean validateAddress(String email) {
         boolean result = true;
         try {
             InternetAddress emailAddr = new InternetAddress(email);

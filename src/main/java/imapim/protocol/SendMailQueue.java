@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 
 public class SendMailQueue extends Observable {
 
-    Logger log = Logger.getLogger(SendMailQueue.class.getName());
+    private Logger log = Logger.getLogger(SendMailQueue.class.getName());
 
     private static SendMailQueue ourInstance = null;
 
@@ -56,7 +56,9 @@ public class SendMailQueue extends Observable {
     }
 
     public void stop() {
-        sendThread.interrupt();
+        if (sendThread != null) {
+            sendThread.interrupt();
+        }
     }
 
 }

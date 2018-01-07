@@ -4,6 +4,7 @@ import imapim.data.Person;
 import imapim.data.Setting;
 import imapim.protocol.IMAPHelper;
 import imapim.security.AESHelper;
+import imapim.security.PGPDecrypt;
 import imapim.ui.IMHelper;
 import imapim.ui.StageController;
 import imapim.ui.im.IMController;
@@ -53,6 +54,43 @@ public class ContactController extends StageController implements Observer {
 
     @FXML
     private void initialize() throws IOException {
+        inputAppPassword();
+        while (Setting.instance == null && (new File("config.dat").exists() || new File("contact.dat").exists())) {
+            try {
+                Setting.instance = Setting.loadConfig();
+            } catch (IllegalArgumentException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("PasswordError");
+                alert.setHeaderText("Wrong password!");
+                alert.setContentText(e.getMessage());
+                alert.showAndWait();
+                inputAppPassword();
+            }
+        }
+        if (Setting.instance == null) {
+            setting();
+            if (Setting.instance == null) {
+                System.exit(0);
+            }
+        } else {
+            try {
+                new PGPDecrypt().loadPrivateKey(Setting.instance.optString("privatekeyFile"),
+                        Setting.instance.optString("privatekeyId"),
+                        Setting.instance.optString("privatekeyPass"));
+            } catch (Exception e) {
+                e.printStackTrace();
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Private Key Error");
+                alert.setHeaderText("Failed to load private key");
+                alert.setContentText(e.getMessage());
+                alert.showAndWait();
+                Setting.instance = null;
+                setting();
+                if (Setting.instance == null) {
+                    System.exit(0);
+                }
+            }
+        }
         listView.setItems(personList);
         listView.setCellFactory(param -> new ListViewCell());
         listView.setOnMouseClicked(click -> {
@@ -64,12 +102,6 @@ public class ContactController extends StageController implements Observer {
             }
         });
         readList();
-        if (Setting.instance == null) {
-            setting();
-            if (Setting.instance == null) {
-                System.exit(0);
-            }
-        }
         IMAPHelper.getInstance().connectionStatus.addObserver((o, arg) -> {
             String status = (String) arg;
             String stat = "";
@@ -156,24 +188,10 @@ public class ContactController extends StageController implements Observer {
         saveList();
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     private void readList() {
         personList.clear();
         File f = new File("contact.dat");
-        if (appPassword == null) {
-            PasswordDialog prompt = new PasswordDialog();
-            prompt.setTitle("App Password");
-            if (f.exists()) {
-                prompt.setHeaderText("Please input password");
-            } else {
-                prompt.setHeaderText("Please set password");
-            }
-            Optional<String> result = prompt.showAndWait();
-            if (result.isPresent()) {
-                appPassword = result.get();
-            } else {
-                System.exit(0);
-            }
-        }
         try {
             InputStream is = new FileInputStream(f);
             byte[] b = new byte[is.available()];
@@ -186,7 +204,7 @@ public class ContactController extends StageController implements Observer {
                 alert.setHeaderText("Wrong password!");
                 alert.showAndWait();
                 appPassword = null;
-                readList();
+                inputAppPassword();
                 return;
             }
             JSONArray contact = new JSONArray(new String(decrypted, "utf-8"));
@@ -203,6 +221,24 @@ public class ContactController extends StageController implements Observer {
             alert.setTitle("IO Error");
             alert.setContentText(e.getMessage());
             alert.showAndWait();
+        }
+    }
+
+    private void inputAppPassword() {
+        if (appPassword == null) {
+            PasswordDialog prompt = new PasswordDialog();
+            prompt.setTitle("App Password");
+            if (new File("config.dat").exists() || new File("contact.dat").exists()) {
+                prompt.setHeaderText("Please input password");
+            } else {
+                prompt.setHeaderText("Please set password");
+            }
+            Optional<String> result = prompt.showAndWait();
+            if (result.isPresent()) {
+                appPassword = result.get();
+            } else {
+                System.exit(0);
+            }
         }
     }
 

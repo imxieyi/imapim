@@ -160,7 +160,9 @@ public class IMAPHelper extends Observable {
      * Stop listening to new emails.
      */
     public void stopListening() {
-        imapThread.interrupt();
+        if (imapThread != null) {
+            imapThread.interrupt();
+        }
         try {
             if(folder != null) {
                 folder.close();
