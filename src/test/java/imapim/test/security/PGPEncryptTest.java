@@ -7,13 +7,13 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-public class PGPEncryptTest {
+class PGPEncryptTest {
 
-    static PGPEncrypt encrypt = new PGPEncrypt();
+    private static PGPEncrypt encrypt = new PGPEncrypt();
 
     @BeforeAll
     static void loadPublicKeyFromKeyRing() throws IOException, PGPException {
-        encrypt.loadPublicKey("src/test/resources/pubring.gpg", "8C0A0ADD");
+        encrypt.addPublicKey("src/test/resources/pubring.gpg", "8C0A0ADD");
     }
 
     @Test

@@ -9,14 +9,14 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-public class PGPDecryptTest {
+class PGPDecryptTest {
 
-    static PGPEncrypt encrypt = new PGPEncrypt();
-    static PGPDecrypt decrypt = new PGPDecrypt();
+    private static PGPEncrypt encrypt = new PGPEncrypt();
+    private static PGPDecrypt decrypt = new PGPDecrypt();
 
     @BeforeAll
     static void loadKeys() throws IOException, PGPException {
-        encrypt.loadPublicKey("src/test/resources/pubring.gpg", "8C0A0ADD");
+        encrypt.addPublicKey("src/test/resources/pubring.gpg", "8C0A0ADD");
         decrypt.loadPrivateKey("src/test/resources/secring.gpg", "8C0A0ADD", "111111");
     }
 

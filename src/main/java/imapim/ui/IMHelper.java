@@ -34,8 +34,8 @@ public class IMHelper extends Observable implements Observer {
         return ourInstance;
     }
 
-    Map<String, Chat> chats = new HashMap<>();
-    Map<String, Person> people = new HashMap<>();
+    private Map<String, Chat> chats = new HashMap<>();
+    private Map<String, Person> people = new HashMap<>();
 
     private IMHelper() {
     }
@@ -69,6 +69,10 @@ public class IMHelper extends Observable implements Observer {
     public void remove(Person person) {
         chats.remove(person.email);
         log.info("Person removed: " + person.email);
+    }
+
+    public Chat getChat(Person person) {
+        return chats.get(person.email);
     }
 
     public void start() {
