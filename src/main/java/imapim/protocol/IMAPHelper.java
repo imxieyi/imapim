@@ -123,6 +123,7 @@ public class IMAPHelper extends Observable {
                     while(!Thread.interrupted()) {
                         // Keep connection alive
                         folder.idle();
+                        Thread.sleep(1000);
                     }
                     connectionStatus.notify("disconnected");
                     // Stop listening
