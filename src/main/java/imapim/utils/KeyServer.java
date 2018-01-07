@@ -1,6 +1,7 @@
 package imapim.utils;
 
 import imapim.data.PubGPGKey;
+import javafx.beans.property.StringProperty;
 import org.jsoup.Connection;
 import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
@@ -16,7 +17,7 @@ import java.util.regex.Pattern;
 public class KeyServer {
 
     private static KeyServer server;
-
+    private static String serverHost = "keys.gnupg.net";
     public static KeyServer getInstance() {
         if (KeyServer.server == null) {
             KeyServer.server = new KeyServer();
@@ -30,7 +31,7 @@ public class KeyServer {
         Elements elements = null;
         ArrayList<PubGPGKey> searchList = new ArrayList<PubGPGKey>();
         try {
-            String url = "http://pgp.mit.edu/pks/lookup?op=index&search=" + pattern;
+            String url = "http://" + serverHost + "/pks/lookup?op=index&search=" + pattern;
             Connection con = Jsoup.connect(url).userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21").timeout(30000);
             // Connection.Response resp = con.execute();
             doc = con.get();
@@ -66,7 +67,7 @@ public class KeyServer {
     }
 
     private String matchUserID(Element el) {
-        System.out.println(el.html());
+        // System.out.println(el.html());
         Elements links = el.select("a:gt(0)");
         if (links.size() > 0) {
             return links.text();
@@ -76,13 +77,13 @@ public class KeyServer {
     }
 
     public String getKeyContent(String keyID) {
-        String contentURL = "http://pgp.mit.edu/pks/lookup?op=get&search=0x";
+        String contentURL = "http://" + serverHost + "/pks/lookup?op=get&search=0x";
         Document doc = null;
         String pubKeyContent = "";
         try {
             doc = Jsoup.connect(contentURL + keyID).get();
             pubKeyContent = doc.selectFirst("pre").text();
-            System.out.println(pubKeyContent);
+            // System.out.println(pubKeyContent);
         } catch (HttpStatusException e) {
             System.out.println("Error");
         } catch (IOException e) {
@@ -92,7 +93,7 @@ public class KeyServer {
     }
 
     public Boolean uploadKey(String pubKey) {
-        Connection con = Jsoup.connect("http://pgp.mit.edu/pks/add");
+        Connection con = Jsoup.connect("http://" + serverHost + "/pks/add");
         con.data("keytext", pubKey);
         try {
             Document doc = con.post();

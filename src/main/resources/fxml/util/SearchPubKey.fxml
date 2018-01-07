@@ -5,44 +5,38 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<SplitPane dividerPositions="0.8190954773869347" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-           minWidth="-Infinity" orientation="VERTICAL" prefHeight="400.0" prefWidth="800.0"
-           xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-           fx:controller="imapim.ui.contact.SearchPubKeyController">
+<SplitPane dividerPositions="0.8190954773869347" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="400.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="imapim.ui.contact.SearchPubKeyController">
     <items>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
             <children>
-                <TableView layoutX="75.0" layoutY="50.0" prefHeight="200.0" prefWidth="200.0"
-                           AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                           AnchorPane.topAnchor="0.0">
+                <TableView fx:id="resultTable" layoutX="75.0" layoutY="50.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <columns>
-                        <TableColumn prefWidth="174.0" text="Primary KeyID"/>
-                        <TableColumn prefWidth="622.0" text="UserName and Email"/>
+                        <TableColumn fx:id="primaryKeyId" prefWidth="174.0" text="Primary KeyID" />
+                        <TableColumn fx:id="keyDetails" prefWidth="622.0" text="UserName and Email" />
+                  <TableColumn fx:id="keyDetails1" prefWidth="622.0" text="Select" />
                     </columns>
                     <columnResizePolicy>
-                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                     </columnResizePolicy>
                 </TableView>
             </children>
         </AnchorPane>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
             <children>
-                <HBox alignment="CENTER" layoutX="14.0" layoutY="-15.0" prefHeight="100.0" prefWidth="200.0"
-                      AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                      AnchorPane.topAnchor="0.0">
+                <HBox alignment="CENTER" layoutX="14.0" layoutY="-15.0" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <children>
                         <Label text="Search Keyword">
                             <padding>
-                                <Insets right="30.0"/>
+                                <Insets right="30.0" />
                             </padding>
                             <HBox.margin>
-                                <Insets left="30.0"/>
+                                <Insets left="30.0" />
                             </HBox.margin>
                         </Label>
-                        <TextField prefHeight="25.0" prefWidth="300.0"/>
-                        <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="88.0" text="Search">
+                        <TextField fx:id="keyword" prefHeight="25.0" prefWidth="300.0" text="fangyd1997" />
+                        <Button mnemonicParsing="false" onAction="#search" prefHeight="25.0" prefWidth="88.0" text="Search">
                             <HBox.margin>
-                                <Insets left="30.0" right="30.0"/>
+                                <Insets left="30.0" right="30.0" />
                             </HBox.margin>
                         </Button>
                     </children>
