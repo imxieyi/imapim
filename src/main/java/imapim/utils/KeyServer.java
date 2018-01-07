@@ -1,7 +1,9 @@
 package imapim.utils;
 
 import imapim.data.PubGPGKey;
+import imapim.data.Setting;
 import javafx.beans.property.StringProperty;
+import org.json.JSONObject;
 import org.jsoup.Connection;
 import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
@@ -18,7 +20,12 @@ public class KeyServer {
 
     private static KeyServer server;
     private static String serverHost = "keys.gnupg.net";
+
     public static KeyServer getInstance() {
+        JSONObject json = Setting.loadConfig();
+        if (json != null) {
+            serverHost = json.optString("keyServer", "keys.gnupg.net");
+        }
         if (KeyServer.server == null) {
             KeyServer.server = new KeyServer();
         }
@@ -77,7 +84,7 @@ public class KeyServer {
     }
 
     public String getKeyContent(String keyID) {
-        String contentURL = "http://" + serverHost + "/pks/lookup?op=get&search=0x" ;
+        String contentURL = "http://" + serverHost + "/pks/lookup?op=get&search=0x";
         Document doc = null;
         String pubKeyContent = "";
         try {
