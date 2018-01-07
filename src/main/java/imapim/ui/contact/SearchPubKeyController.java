@@ -39,6 +39,7 @@ public class SearchPubKeyController extends StageController {
 
     @FXML
     void initialize() {
+        selected = false;
         resultList.addAll(new ArrayList<PubGPGKey>());
         resultTable.setItems(resultList);
         resultTable.setRowFactory(tv -> {
