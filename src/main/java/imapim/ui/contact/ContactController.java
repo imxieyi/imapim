@@ -264,9 +264,11 @@ public class ContactController extends StageController implements Observer {
         if (connected) {
             IMHelper.getInstance().stop();
             IMHelper.getInstance().deleteObserver(this);
+            connect.setText("Connect");
         } else {
             IMHelper.getInstance().addObserver(this);
             IMHelper.getInstance().start();
+            connect.setText("Disconnect");
         }
     }
 
@@ -318,12 +320,18 @@ public class ContactController extends StageController implements Observer {
                         personList.set(i, personList.get(i - 1));
                     }
                 } else {
-                    personList.add(personList.get(personList.size() - 1));
+                    if (personList.size() > 0) {
+                        personList.add(personList.get(personList.size() - 1));
+                    }
                     for (int i = personList.size() - 1; i > 0; i--) {
                         personList.set(i, personList.get(i - 1));
                     }
                 }
-                personList.set(0, p);
+                if (personList.size() > 0) {
+                    personList.set(0, p);
+                } else {
+                    personList.add(p);
+                }
                 semaphore.release();
             } catch (InterruptedException e) {
                 e.printStackTrace();
