@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<AnchorPane prefHeight="550.0" stylesheets="@../../css/bootstrap/bootstrap3.css"
-            xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="imapim.ui.util.SettingController">
+
+<AnchorPane prefHeight="550.0" stylesheets="@../../css/bootstrap/bootstrap3.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="imapim.ui.util.SettingController">
    <children>
       <GridPane layoutX="91.0" layoutY="110.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="299.0" minWidth="10.0" prefWidth="193.0" />
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="320.0" minWidth="10.0" prefWidth="288.0" />
-            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="310.0" minWidth="10.0" prefWidth="96.0"/>
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="310.0" minWidth="10.0" prefWidth="96.0" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -91,32 +91,30 @@
                   <Insets />
                </GridPane.margin>
             </Label>
-             <TextField fx:id="SMTPServer" prefHeight="39.0" prefWidth="256.0" text="smtp.example.com"
-                        GridPane.columnIndex="1"/>
+             <TextField fx:id="SMTPServer" prefHeight="39.0" prefWidth="256.0" text="smtp.example.com" GridPane.columnIndex="1" />
             <TextField fx:id="SMTPPort" text="465" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-             <TextField fx:id="IMAPServer" text="imap.example.com" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+            <CheckBox fx:id="sslSMTP" mnemonicParsing="false" selected="true" text="On/Off" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+             <TextField fx:id="IMAPServer" text="imap.example.com" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <TextField fx:id="IMAPPort" text="993" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-             <TextField fx:id="emailUser" text="foo@example.com" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+            <CheckBox fx:id="sslIMAP" mnemonicParsing="false" selected="true" text="On/Off" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+             <TextField fx:id="emailUser" text="foo@example.com" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            <PasswordField fx:id="emailPassword" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+             <TextField fx:id="senderAddress" text="foo@example.com" GridPane.columnIndex="1" GridPane.rowIndex="8" />
             <TextField fx:id="mailBox" text="INBOX" GridPane.columnIndex="1" GridPane.rowIndex="9" />
             <TextField fx:id="privateKey" text="secring.gpg" GridPane.columnIndex="1" GridPane.rowIndex="10">
                <GridPane.margin>
                   <Insets />
                </GridPane.margin>
             </TextField>
-            <CheckBox fx:id="sslSMTP" mnemonicParsing="false" selected="true" text="On/Off" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <CheckBox fx:id="sslIMAP" mnemonicParsing="false" selected="true" text="On/Off" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <CheckBox fx:id="debug" mnemonicParsing="false" selected="true" text="On/Off" GridPane.columnIndex="1" GridPane.rowIndex="14" />
             <Button mnemonicParsing="false" onAction="#browsePrivateKey" text="Browse" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="10" />
-            <PasswordField fx:id="emailPassword" GridPane.columnIndex="1" GridPane.rowIndex="7" />
             <PasswordField fx:id="passPhrase" text="111111" GridPane.columnIndex="1" GridPane.rowIndex="11" />
             <Label text="Sender Address" GridPane.rowIndex="8" />
-             <TextField fx:id="senderAddress" text="foo@example.com" GridPane.columnIndex="1" GridPane.rowIndex="8"/>
             <Label text="Key Server" GridPane.rowIndex="13" />
-            <TextField fx:id="keyServer" text="pgp.mit.edu" GridPane.columnIndex="1" GridPane.rowIndex="13" />
-             <Label text="Key ID" GridPane.rowIndex="12"/>
             <TextField fx:id="privateKeyId" GridPane.columnIndex="1" GridPane.rowIndex="12" />
-             <Button mnemonicParsing="false" onAction="#select" text="Select" GridPane.columnIndex="2"
-                     GridPane.rowIndex="12"/>
+            <TextField fx:id="keyServer" text="pgp.mit.edu" GridPane.columnIndex="1" GridPane.rowIndex="13" />
+            <CheckBox fx:id="debug" mnemonicParsing="false" selected="true" text="On/Off" GridPane.columnIndex="1" GridPane.rowIndex="14" />
+             <Label text="Key ID" GridPane.rowIndex="12" />
+             <Button mnemonicParsing="false" onAction="#select" text="Select" GridPane.columnIndex="2" GridPane.rowIndex="12" />
          </children>
          <padding>
             <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
