@@ -6,6 +6,7 @@ import imapim.protocol.MessageHelper;
 import imapim.protocol.SendMailQueue;
 import imapim.ui.StageController;
 import imapim.ui.pgp.GeneratorController;
+import imapim.ui.util.SettingController;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -24,7 +25,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.DataNode;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Node;
-import sun.rmi.runtime.Log;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeUtility;

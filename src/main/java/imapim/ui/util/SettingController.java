@@ -1,4 +1,4 @@
-package imapim.ui.im;
+package imapim.ui.util;
 
 import imapim.data.Setting;
 import imapim.security.PGPDecrypt;
