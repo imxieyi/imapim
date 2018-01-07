@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
-
 <BorderPane prefHeight="500.0" prefWidth="800.0" stylesheets="@../../css/bootstrap/bootstrap3.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="imapim.ui.contact.ContactController">
     <top><MenuBar BorderPane.alignment="CENTER">
         <menus>
@@ -31,6 +25,14 @@
               <items>
                 <MenuItem mnemonicParsing="false" text="Connect" />
               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Key">
+                <items>
+                    <MenuItem mnemonicParsing="false" onAction="#genKey" text="Generate"/>
+                    <SeparatorMenuItem mnemonicParsing="false"/>
+                    <MenuItem mnemonicParsing="false" text="Upload"/>
+                    <MenuItem mnemonicParsing="false" text="Download"/>
+                </items>
             </Menu>
             <Menu mnemonicParsing="false" text="Help">
                 <items>

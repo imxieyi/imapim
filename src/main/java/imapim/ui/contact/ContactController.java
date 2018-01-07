@@ -3,7 +3,8 @@ package imapim.ui.contact;
 import imapim.data.Person;
 import imapim.security.AESHelper;
 import imapim.ui.StageController;
-import imapim.ui.util.SettingController;
+import imapim.ui.im.SettingController;
+import imapim.ui.pgp.GeneratorController;
 import imapim.ui.util.PasswordDialog;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -98,10 +99,15 @@ public class ContactController extends StageController {
 
     private void readList() {
         personList.clear();
+        File f = new File("contact.dat");
         if (appPassword == null) {
             PasswordDialog prompt = new PasswordDialog();
             prompt.setTitle("App Password");
-            prompt.setHeaderText("Please input password");
+            if (f.exists()) {
+                prompt.setHeaderText("Please input password");
+            } else {
+                prompt.setHeaderText("Please set password");
+            }
             Optional<String> result = prompt.showAndWait();
             if (result.isPresent()) {
                 appPassword = result.get();
@@ -109,7 +115,6 @@ public class ContactController extends StageController {
                 System.exit(0);
             }
         }
-        File f = new File("contact.dat");
         try {
             InputStream is = new FileInputStream(f);
             byte[] b = new byte[is.available()];
@@ -131,6 +136,7 @@ public class ContactController extends StageController {
                 personList.add(Person.fromJSON((JSONObject) it.next()));
             }
         } catch (FileNotFoundException ignored) {
+            saveList();
         } catch (IOException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("IO Error");
@@ -153,6 +159,20 @@ public class ContactController extends StageController {
             alert.setContentText(e.getMessage());
             alert.showAndWait();
         }
+    }
+
+    @FXML
+    private void genKey() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/pgp/generator.fxml"));
+        Scene scene = new Scene(loader.load());
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initStyle(StageStyle.UTILITY);
+        stage.setResizable(false);
+        ((GeneratorController) loader.getController()).setStage(stage);
+        stage.setTitle("PGP Key Pair Generator");
+        stage.setScene(scene);
+        stage.showAndWait();
     }
 
     @FXML

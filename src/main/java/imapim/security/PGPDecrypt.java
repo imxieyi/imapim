@@ -32,7 +32,7 @@ public class PGPDecrypt {
             }
         }
         if(privateKey == null) {
-            throw new IllegalArgumentException("No private key found!");
+            throw new IllegalArgumentException("No private key found with given ID!");
         }
     }
 

@@ -1,8 +1,11 @@
 package imapim.ui.util;
 
 import imapim.data.Setting;
+import imapim.security.PGPDecrypt;
 import imapim.ui.StageController;
+import imapim.ui.pgp.KeyIDListHelper;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -79,8 +82,50 @@ public class SettingController extends StageController {
         }
     }
 
+    private String validate() {
+        if (SMTPServer.getText().length() <= 0) {
+            return "Please input SMTP server!";
+        }
+        if (SMTPPort.getText().length() <= 0) {
+            return "Please input SMTP Port!";
+        }
+        if (IMAPServer.getText().length() <= 0) {
+            return "Please input IMAP server!";
+        }
+        if (IMAPPort.getText().length() <= 0) {
+            return "Please input IMAP Port!";
+        }
+        if (senderAddress.getText().length() <= 0) {
+            return "Please input sender email address!";
+        }
+        if (emailUser.getText().length() <= 0) {
+            return "Please input email user name!";
+        }
+        if (mailBox.getText().length() <= 0) {
+            return "Please input mailbox!";
+        }
+        if (privateKey.getText().length() <= 0) {
+            return "Please input private key path!";
+        }
+        try {
+            PGPDecrypt decrypt = new PGPDecrypt();
+            decrypt.loadPrivateKey(privateKey.getText(), privateKeyId.getText(), passPhrase.getText());
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+        return null;
+    }
+
     @FXML
     private void save() {
+        String msg = validate();
+        if (msg != null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setContentText(msg);
+            alert.show();
+            return;
+        }
         JSONObject json = new JSONObject();
         json.put("smtphost", SMTPServer.getText());
         json.put("smtpport", SMTPPort.getText());
@@ -99,6 +144,31 @@ public class SettingController extends StageController {
         json.put("keyServer", keyServer.getText());
         Setting.saveConfig(json);
         stage.close();
+    }
+
+    @FXML
+    private void select() {
+        String msg = null;
+        if (privateKey.getText().length() <= 0) {
+            msg = "Please input private key path!";
+        } else {
+            try {
+                String id = KeyIDListHelper.selectID(privateKey.getText(), false);
+                if (id == null) {
+                    msg = "No private key found in given file!";
+                } else if (!id.equals("")) {
+                    privateKeyId.setText(id);
+                }
+            } catch (Exception e) {
+                msg = e.getMessage();
+            }
+        }
+        if (msg != null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setContentText(msg);
+            alert.show();
+        }
     }
 
     @FXML
