@@ -81,7 +81,7 @@ public class EditController extends StageController {
             try {
                 String id = KeyIDListHelper.selectID(pubkey.getText(), true);
                 if (id == null) {
-                    msg = "No public found in given file!";
+                    msg = "No public key found in given file!";
                 } else if (!id.equals("")) {
                     keyid.setText(id);
                 }
