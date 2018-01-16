@@ -6,27 +6,27 @@ An instant message JAVA application based on IMAP protocol and GPG encryption.
 
 main window:
 
-![javaw_2018-01-16_17-57-25](.\imgs\javaw_2018-01-16_17-57-25.png)
+![javaw_2018-01-16_17-57-25](./imgs/javaw_2018-01-16_17-57-25.png)
 
 Setting
 
-![javaw_2018-01-16_17-58-28](.\imgs\javaw_2018-01-16_17-58-28.png)
+![javaw_2018-01-16_17-58-28](./imgs/javaw_2018-01-16_17-58-28.png)
 
 Key Generator
 
-![javaw_2018-01-16_17-58-28](.\imgs\javaw_2018-01-16_17-58-39.png)
+![javaw_2018-01-16_17-58-28](./imgs/javaw_2018-01-16_17-58-39.png)
 
 Add contact
 
-![javaw_2018-01-16_17-58-28](.\imgs\javaw_2018-01-16_17-58-55.png)
+![javaw_2018-01-16_17-58-28](./imgs/javaw_2018-01-16_17-58-55.png)
 
 Search For contact on public key server
 
-![javaw_2018-01-16_17-58-28](.\imgs\javaw_2018-01-16_17-59-27.png)
+![javaw_2018-01-16_17-58-28](./imgs/javaw_2018-01-16_17-59-27.png)
 
 Chat window
 
-![javaw_2018-01-16_17-58-28](.\imgs\javaw_2018-01-16_17-59-50.png)
+![javaw_2018-01-16_17-58-28](./imgs/javaw_2018-01-16_17-59-50.png)
 
 ## Application Features
 
