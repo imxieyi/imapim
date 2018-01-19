@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
+
 <BorderPane prefHeight="500.0" prefWidth="800.0" stylesheets="@../../css/bootstrap/bootstrap3.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="imapim.ui.contact.ContactController">
     <top><MenuBar BorderPane.alignment="CENTER">
         <menus>
             <Menu mnemonicParsing="false" text="File">
                 <items>
-                    <MenuItem mnemonicParsing="false" onAction="#setting" text="Settings"/>
+                    <MenuItem mnemonicParsing="false" onAction="#setting" text="Settings" />
                   <SeparatorMenuItem mnemonicParsing="false" />
-                    <MenuItem mnemonicParsing="false" onAction="#onExit" text="Exit"/>
+                    <MenuItem mnemonicParsing="false" onAction="#onExit" text="Exit" />
                 </items>
             </Menu>
             <Menu mnemonicParsing="false" text="Edit">
@@ -23,15 +29,15 @@
             </Menu>
             <Menu mnemonicParsing="false" text="Session">
               <items>
-                  <MenuItem fx:id="connect" mnemonicParsing="false" onAction="#onConnect" text="Connect"/>
+                  <MenuItem fx:id="connect" mnemonicParsing="false" onAction="#onConnect" text="Connect" />
               </items>
             </Menu>
             <Menu mnemonicParsing="false" text="Key">
                 <items>
-                    <MenuItem mnemonicParsing="false" onAction="#genKey" text="Generate"/>
-                    <SeparatorMenuItem mnemonicParsing="false"/>
-                    <MenuItem mnemonicParsing="false" text="Upload"/>
-                    <MenuItem mnemonicParsing="false" text="Download"/>
+                    <MenuItem mnemonicParsing="false" onAction="#genKey" text="Generate" />
+                    <SeparatorMenuItem mnemonicParsing="false" />
+                    <MenuItem fx:id="uploadKey" mnemonicParsing="false" text="Upload" />
+                    <MenuItem fx:id="downloadKey" mnemonicParsing="false" text="Download" />
                 </items>
             </Menu>
             <Menu mnemonicParsing="false" text="Help">
