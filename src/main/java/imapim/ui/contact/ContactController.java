@@ -28,6 +28,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.nodes.Document;
 
+import javax.crypto.BadPaddingException;
 import java.io.*;
 import java.util.Observable;
 import java.util.Observer;
@@ -64,6 +65,7 @@ public class ContactController extends StageController implements Observer {
                 alert.setHeaderText("Wrong password!");
                 alert.setContentText(e.getMessage());
                 alert.showAndWait();
+                appPassword = null;
                 inputAppPassword();
             }
         }
