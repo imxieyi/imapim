@@ -10,6 +10,7 @@ import imapim.ui.StageController;
 import imapim.ui.im.IMController;
 import imapim.ui.pgp.GeneratorController;
 import imapim.ui.util.PasswordDialog;
+import imapim.utils.KeyServer;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -30,6 +31,7 @@ import org.jsoup.nodes.Document;
 
 import javax.crypto.BadPaddingException;
 import java.io.*;
+import java.security.Key;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Optional;
@@ -339,6 +341,16 @@ public class ContactController extends StageController implements Observer {
                 e.printStackTrace();
             }
         });
+    }
+    @FXML
+    public void uploadKey() {
+        KeyServer server = KeyServer.getInstance();
+        JSONObject setting = Setting.loadConfig();
+        String priKeyPath = setting.optString("privatekeyFile");
+    }
+
+    @FXML void downloadKey(){
+
     }
 
 }
