@@ -1,4 +1,4 @@
-# IMAPIM
+# Computer Network (CS305) Project - IMAPIM
 
 An instant message JAVA application based on IMAP protocol and GPG encryption.
 
